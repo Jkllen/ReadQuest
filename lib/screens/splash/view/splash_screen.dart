@@ -25,9 +25,7 @@ class _SplashViewState extends State<_SplashView>
     with SingleTickerProviderStateMixin {
 
   late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _floatAnimation;
+
 
   @override
   void initState() {
@@ -38,14 +36,6 @@ class _SplashViewState extends State<_SplashView>
       duration: const Duration(seconds: 2),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0, end: 1)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
-
-    _floatAnimation = Tween<double>(begin: 0, end: 10)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.repeat(reverse: true);
     _controller.forward();
@@ -82,22 +72,22 @@ class _SplashViewState extends State<_SplashView>
 
               // Animated Logo
               AnimatedBuilder(
-                animation: _floatAnimation,
+                animation: _controller,
                 builder: (context, child) {
+                  final double bounce = 10 * (1 - (_controller.value - 0.5).abs() * 2);
+                  final double scale = 0.98 + 0.04 * (_controller.value);
+
                   return Transform.translate(
-                    offset: Offset(0, -_floatAnimation.value),
-                    child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: ScaleTransition(
-                        scale: _scaleAnimation,
-                        child: child,
+                    offset: Offset(0, -bounce),
+                    child: Transform.scale(
+                      scale: scale,
+                      child: child,
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
                 child: Image.asset(
                   'assets/images/read_quest_logo_splash.png',
-                  height: 260,
+                  height: MediaQuery.of(context).size.height * 0.3,
                 ),
               ),
 
