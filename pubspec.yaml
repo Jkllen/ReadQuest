@@ -1,0 +1,46 @@
+name: read_quest
+description: "A flutter project for HCI."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  provider: ^6.1.5+1 
+
+  cupertino_icons: ^1.0.8
+  flutter_native_splash: ^2.4.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Mojangles
+      fonts:
+        - asset: assets/fonts/mojangles.otf
+      
+    - family: Tilt Warp
+      fonts:
+        - asset: assets/fonts/TiltWarp-Regular-VariableFont_XROT,YROT.ttf
+
+flutter_native_splash:
+  color: "#ECFCFF"
+  image: assets/images/read_quest_logo_splash.png
+  android: true
+  ios: true
+  android_gravity: center
+  ios_content_mode: center
