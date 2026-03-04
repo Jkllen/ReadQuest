@@ -14,4 +14,40 @@ class UserService {
 
     return doc.data()?['username'] as String?;
   }
+
+  // RealTime Stream of A User
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamUser(String uid) {
+    return _db.collection('users').doc(uid).snapshots();
+  }
+
+  // User Created Doc On Register
+  Future<void> createUserDoc({
+    required String uid,
+    required String username,
+  }) async {
+    await _db.collection('users').doc(uid).set({
+      "username": username,
+      "level": 0,
+      "streak": 0,
+      "currentXp": 0,
+      "targetXp": 2000,
+      "totalXpEarned": 0,
+      "badgesWon": 0,
+      "streakDays": 0,
+      "wordsLearned": 0,
+      "currentStageTitle": "Stage title",
+      "updatedAt": FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> updateUser(String uid, Map<String, dynamic> data) async {
+    await _db.collection('users').doc(uid).set(
+      {
+        ...data,
+        "updatedAt": FieldValue.serverTimestamp(),
+      },
+      SetOptions(merge: true),
+    );
+  }
+  
 }
