@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:read_quest/services/auth_services.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  String _username = '';
+  String _email = '';
   String _password = '';
   bool _isLoading = false;
 
-  String get username => _username;
+  String get email => _email;
   String get password => _password;
   bool get isLoading => _isLoading;
 
-  void setUsername(String value) {
-    _username = value;
+  void setEmail(String value) {
+    _email = value.trim();
     notifyListeners();
   }
 
@@ -19,25 +21,37 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(BuildContext context) async {
-    if (_username.isEmpty || _password.isEmpty) {
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
-      );
-      return;
+  Future<String?> login() async {
+    if (_email.isEmpty || _password.isEmpty) {
+      return 'Please fill in all fields';
     }
 
     _isLoading = true;
     notifyListeners();
 
-    // Simulate login delay
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final user = await AuthService().login(
+        email: _email,
+        password: _password,
+      );
 
-    _isLoading = false;
-    notifyListeners();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Login Successful!')),
-    );
+      if (user == null) {
+        return 'Login failed. Please try again.';
+      }
+
+      return null; 
+    } on FirebaseAuthException catch (e) {
+      return switch (e.code) {
+        'user-not-found' => 'No account found for that email.',
+        'wrong-password' => 'Wrong password.',
+        'invalid-email' => 'Invalid email format.',
+        _ => 'Login failed: ${e.message}',
+      };
+    } catch (e) {
+      return 'Login failed: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

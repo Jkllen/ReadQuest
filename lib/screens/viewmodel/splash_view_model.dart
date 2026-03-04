@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:read_quest/routes/app_routes.dart';
 
 class SplashViewModel extends ChangeNotifier {
   double _progress = 0.0;
@@ -19,7 +21,16 @@ class SplashViewModel extends ChangeNotifier {
 
       if (currentTick >= ticks) {
         timer.cancel();
-        Navigator.pushReplacementNamed(context, '/login');
+
+        if (!context.mounted) return;
+
+        final user = FirebaseAuth.instance.currentUser;
+
+        if (user != null) {
+          Navigator.pushReplacementNamed(context, AppRoutes.home);
+        } else {
+          Navigator.pushReplacementNamed(context, AppRoutes.login);
+        }
       }
     });
   }
