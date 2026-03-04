@@ -1,4 +1,4 @@
-package com.example.read_quest
+package com.hci.read_quest
 
 import io.flutter.embedding.android.FlutterActivity
 
