@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:read_quest/widgets/home/my_progress_section.dart';
+import 'package:read_quest/widgets/home/start_quest_card.dart';
+import 'package:read_quest/widgets/home/stat_card.dart';
+import 'package:read_quest/widgets/home/streak_badge.dart';
+import 'package:read_quest/widgets/home/user_greeting.dart';
+import 'package:read_quest/widgets/home/xp_progress_bar.dart';
+
+// import 'package:read_quest/widgets/home/';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,7 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Read"),
-          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: "Rewards"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard),
+            label: "Rewards",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
         ],
       ),
@@ -61,13 +72,13 @@ class _HomeTab extends StatelessWidget {
     final uid = FirebaseAuth.instance.currentUser?.uid;
 
     if (uid == null) {
-      return const SafeArea(
-        child: Center(child: Text("Not logged in.")),
-      );
+      return const SafeArea(child: Center(child: Text("Not logged in.")));
     }
 
-    final stream =
-        FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
+    final stream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots();
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: stream,
@@ -105,8 +116,10 @@ class _HomeTab extends StatelessWidget {
         final int streakDays = _asInt(data["streakDays"], fallback: 0);
         final int wordsLearned = _asInt(data["wordsLearned"], fallback: 0);
 
-        final String stageTitle =
-            _asString(data["currentStageTitle"], fallback: "Stage title");
+        final String stageTitle = _asString(
+          data["currentStageTitle"],
+          fallback: "Stage title",
+        );
 
         return SafeArea(
           child: SingleChildScrollView(
@@ -207,7 +220,6 @@ class _HomeTab extends StatelessWidget {
   }
 }
 
-// 
 
 class ReadQuestLogo extends StatelessWidget {
   const ReadQuestLogo({super.key});
@@ -294,10 +306,7 @@ class ReadQuestLogo extends StatelessWidget {
       ],
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
-          _LogoImage(),
-          SizedBox(height: 2),
-        ],
+        children: const [_LogoImage(), SizedBox(height: 2)],
       ),
     );
   }
@@ -308,438 +317,6 @@ class _LogoImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      "assets/images/read_quest_logo_splash.png",
-      height: 65,
-    );
-  }
-}
-
-class StreakBadge extends StatelessWidget {
-  final int streak;
-
-  const StreakBadge({super.key, required this.streak});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 39,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF7ED),
-        border: Border.all(color: const Color(0xFFDC7C52), width: 1),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '$streak',
-            style: const TextStyle(
-              color: Color(0xFFFF6900),
-              fontSize: 16,
-              fontFamily: 'Mojangles',
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(width: 6),
-          const Text(
-            'Streak',
-            style: TextStyle(
-              color: Color(0xFFFF6900),
-              fontSize: 16,
-              fontFamily: 'Mojangles',
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class UserGreeting extends StatelessWidget {
-  final String username;
-  final int level;
-
-  const UserGreeting({
-    super.key,
-    required this.username,
-    required this.level,
-  });
-
-  String getLevelTitle(int level) {
-    if (level == 0) return "Newbie";
-    if (level < 5) return "Reader";
-    if (level < 10) return "Scholar";
-    return "Master";
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Welcome, $username!',
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontFamily: 'IBM Plex Sans',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Level $level ${getLevelTitle(level)}',
-          style: const TextStyle(
-            color: Color(0xFF00ACF6),
-            fontSize: 14,
-            fontFamily: 'IBM Plex Sans',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class XpProgressBar extends StatelessWidget {
-  final int currentXp;
-  final int targetXp;
-
-  const XpProgressBar({
-    super.key,
-    required this.currentXp,
-    required this.targetXp,
-  });
-
-  String _formatNumber(int n) {
-    final s = n.toString();
-    final buffer = StringBuffer();
-    for (int i = 0; i < s.length; i++) {
-      final reverseIndex = s.length - i;
-      buffer.write(s[i]);
-      if (reverseIndex > 1 && reverseIndex % 3 == 1) buffer.write(',');
-    }
-    return buffer.toString();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final double progress =
-        targetXp == 0 ? 0 : (currentXp / targetXp).clamp(0.0, 1.0);
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            const Text(
-              'XP Progress',
-              style: TextStyle(
-                color: Color(0xFF8B8B8B),
-                fontSize: 14,
-                fontFamily: 'Maname',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            const Spacer(),
-            Text(
-              '${_formatNumber(currentXp)}/${_formatNumber(targetXp)} XP',
-              style: const TextStyle(
-                color: Color(0xFF8B8B8B),
-                fontSize: 14,
-                fontFamily: 'Maname',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(18.5),
-          child: Container(
-            height: 13,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF3F4F6),
-              border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
-              borderRadius: BorderRadius.circular(18.5),
-            ),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    width: constraints.maxWidth * progress,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2B7FFF),
-                      borderRadius: BorderRadius.circular(18.5),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class StartQuestCard extends StatelessWidget {
-  final String stageTitle;
-  final VoidCallback onTap;
-
-  const StartQuestCard({
-    super.key,
-    required this.stageTitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 90,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment(0.00, 0.50),
-            end: Alignment(1.00, 0.50),
-            colors: [Color(0xFF185AFA), Color(0xFF353BE2)],
-          ),
-          borderRadius: BorderRadius.circular(21),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0xFFB0F0FF),
-              blurRadius: 23.80,
-              offset: Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Row(
-            children: [
-              Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF5170F2),
-                  borderRadius: BorderRadius.circular(9),
-                  border: Border.all(color: const Color(0xFF7D96FF), width: 1),
-                ),
-                child: const Icon(Icons.play_arrow, color: Colors.white),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Start Quest',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Continue: "$stageTitle"',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.chevron_right, color: Colors.white),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class StatCard extends StatelessWidget {
-  final String value;
-  final String label;
-
-  final Color backgroundColor;
-  final Color borderColor;
-  final Color textColor;
-
-  const StatCard({
-    super.key,
-    required this.value,
-    required this.label,
-    required this.backgroundColor,
-    required this.borderColor,
-    required this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 118,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(color: borderColor, width: 1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            value,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 32,
-              fontFamily: 'IBM Plex Sans',
-              fontWeight: FontWeight.w700,
-              height: 1.0,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 13,
-              fontFamily: 'IBM Plex Sans',
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MyProgressSection extends StatelessWidget {
-  final int currentLevel;
-  final int streakDays;
-  final int wordsLearned;
-
-  const MyProgressSection({
-    super.key,
-    required this.currentLevel,
-    required this.streakDays,
-    required this.wordsLearned,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'My Progress',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontFamily: 'IBM Plex Sans',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 14),
-        ProgressListItem(
-          title: 'Current Level',
-          valueText: '$currentLevel',
-          pillBg: const Color(0xFFDBEAFE),
-          valueColor: const Color(0xFF432DD7),
-          valueFontSize: 18,
-        ),
-        const SizedBox(height: 14),
-        ProgressListItem(
-          title: 'Reading Streak',
-          valueText: '$streakDays days',
-          pillBg: const Color(0xFFFFEDD4),
-          valueColor: const Color(0xFFCD681F),
-          valueFontSize: 14,
-        ),
-        const SizedBox(height: 14),
-        ProgressListItem(
-          title: 'Words Learned',
-          valueText: '$wordsLearned',
-          pillBg: const Color(0xFFDBEAFE),
-          valueColor: const Color(0xFF432DD7),
-          valueFontSize: 18,
-        ),
-      ],
-    );
-  }
-}
-
-class ProgressListItem extends StatelessWidget {
-  final String title;
-  final String valueText;
-
-  final Color pillBg;
-  final Color valueColor;
-  final double valueFontSize;
-
-  const ProgressListItem({
-    super.key,
-    required this.title,
-    required this.valueText,
-    required this.pillBg,
-    required this.valueColor,
-    required this.valueFontSize,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 71,
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(21),
-        border: Border.all(color: const Color(0xFFE2E2E2), width: 2),
-      ),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Color(0xFF4F4F4F),
-              fontSize: 18,
-              fontFamily: 'IBM Plex Sans',
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
-            decoration: BoxDecoration(
-              color: pillBg,
-              borderRadius: BorderRadius.circular(10.5),
-            ),
-            child: Text(
-              valueText,
-              style: TextStyle(
-                color: valueColor,
-                fontSize: valueFontSize,
-                fontFamily: 'IBM Plex Sans',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return Image.asset("assets/images/read_quest_logo_splash.png", height: 65);
   }
 }
