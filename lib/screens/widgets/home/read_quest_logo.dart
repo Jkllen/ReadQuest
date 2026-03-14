@@ -45,36 +45,9 @@ class ReadQuestLogo extends StatelessWidget {
           case 'logout':
             await confirmLogout(context);
             break;
-          case 'profile':
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Will not add")),
-            );
-            break;
-          case 'settings':
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Will not add")),
-            );
-            break;
         }
       },
       itemBuilder: (context) => const [
-        PopupMenuItem(
-          value: 'profile',
-          child: ListTile(
-            dense: true,
-            leading: Icon(Icons.person),
-            title: Text("Profile"),
-          ),
-        ),
-        PopupMenuItem(
-          value: 'settings',
-          child: ListTile(
-            dense: true,
-            leading: Icon(Icons.settings),
-            title: Text("Settings"),
-          ),
-        ),
-        PopupMenuDivider(),
         PopupMenuItem(
           value: 'logout',
           child: ListTile(
