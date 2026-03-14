@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/widgets/read/read_category_chips.dart';
 import 'package:read_quest/screens/widgets/read/read_header.dart';
-import 'package:read_quest/screens/widgets/read/read_logo_menu.dart';
+import 'package:read_quest/screens/widgets/logo_menu.dart';
 import 'package:read_quest/screens/widgets/read/read_quest_card.dart';
 
 enum ReadCategory {
@@ -123,8 +123,7 @@ class ReadScreenState extends State<ReadScreen> {
                       final title = (data['title'] ?? '').toString();
                       final author = (data['author'] ?? '').toString();
                       final type = (data['type'] ?? 'story').toString();
-                      final difficulty =
-                          (data['difficulty'] ?? 'easy').toString();
+                      final difficulty = (data['difficulty'] ?? 'easy').toString();
                       final coverUrl = (data['coverUrl'] ?? '').toString();
                       final rewardXp = (data['rewardXp'] ?? 0) as int;
                       final isLocked = (data['isLocked'] ?? false) as bool;
@@ -140,9 +139,7 @@ class ReadScreenState extends State<ReadScreen> {
                         builder: (context, progressSnapshot) {
                           final progressData = progressSnapshot.data?.data();
 
-                          final progress = (progressData?['progress'] is num)
-                              ? (progressData!['progress'] as num).toDouble()
-                              : 0.0;
+                          final progress = (progressData?['progress'] is num) ? (progressData!['progress'] as num).toDouble(): 0.0;
 
                           return ReadQuestCard(
                             title: title,
