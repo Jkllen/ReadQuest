@@ -59,6 +59,5 @@ class AuthService {
   }
 
   Future<void> logout() => auth.signOut();
-
   User? get currentUser => auth.currentUser;
 }
