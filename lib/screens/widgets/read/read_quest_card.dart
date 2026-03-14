@@ -46,8 +46,9 @@ class ReadQuestCard extends StatelessWidget {
       onTap: onTap,
       child: Stack(
         children: [
+          // Card Box Chip
           Container(
-            height: 337,
+            height: 400,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(37),
@@ -66,14 +67,18 @@ class ReadQuestCard extends StatelessWidget {
                     topLeft: Radius.circular(37),
                     topRight: Radius.circular(37),
                   ),
+                  
+                  // Cover Img
                   child: SizedBox(
-                    height: 185,
+                    height: 210,
                     width: double.infinity,
                     child: coverUrl.isNotEmpty
                         ? Image.network(
-                            coverUrl,
+                            coverUrl.trim(),
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
+                              debugPrint('Cover URL Failed: ${coverUrl.trim()}');
+                              debugPrint('Image load error: $error');
                               return Container(
                                 color: const Color(0xFFE5E7EB),
                                 alignment: Alignment.center,
