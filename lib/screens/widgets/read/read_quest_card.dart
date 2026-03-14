@@ -73,7 +73,7 @@ class ReadQuestCard extends StatelessWidget {
                         ? Image.network(
                             coverUrl,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) {
+                            errorBuilder: (context, error, stackTrace) {
                               return Container(
                                 color: const Color(0xFFE5E7EB),
                                 alignment: Alignment.center,
@@ -121,7 +121,7 @@ class ReadQuestCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: difficultyColor.withOpacity(0.12),
+                                color: difficultyColor.withValues(alpha:0.12),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
