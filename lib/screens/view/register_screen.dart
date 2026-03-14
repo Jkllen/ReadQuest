@@ -8,33 +8,33 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<RegisterScreen> createState() => RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  bool _obscurePassword = true;
-  bool _isLoading = false;
+  bool obscurePassword = true;
+  bool isLoading = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _usernameController.dispose();
-    _passwordController.dispose();
+    emailController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleRegister() async {
-    setState(() => _isLoading = true);
+  Future<void> handleRegister() async {
+    setState(() => isLoading = true);
 
     try {
       final user = await AuthService().register(
-        email: _emailController.text,
-        password: _passwordController.text,
-        username: _usernameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        username: usernameController.text,
       );
 
       if (!mounted) return;
@@ -64,11 +64,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         SnackBar(content: Text('Register failed: $e')),
       );
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
       hintStyle: AppTextStyles.inputLabel,
@@ -125,8 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // Email
                 TextField(
-                  controller: _emailController,
-                  decoration: _inputDecoration('Email'),
+                  controller: emailController,
+                  decoration: inputDecoration('Email'),
                   keyboardType: TextInputType.emailAddress,
                 ),
 
@@ -134,22 +134,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // Username
                 TextField(
-                  controller: _usernameController,
-                  decoration: _inputDecoration('Username'),
+                  controller: usernameController,
+                  decoration: inputDecoration('Username'),
                 ),
 
                 const SizedBox(height: 20),
 
                 // Password
                 TextField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: _inputDecoration('Password').copyWith(
+                  controller: passwordController,
+                  obscureText: obscurePassword,
+                  decoration: inputDecoration('Password').copyWith(
                     suffixIcon: IconButton(
                       onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
+                          setState(() => obscurePassword = !obscurePassword),
                       icon: Icon(
-                        _obscurePassword
+                        obscurePassword
                             ? Icons.visibility_off
                             : Icons.visibility,
                       ),
@@ -164,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: 160,
                     height: 48,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _handleRegister,
+                      onPressed: isLoading ? null : handleRegister,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF155DFC),
                         shape: RoundedRectangleBorder(
@@ -172,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         elevation: 5,
                       ),
-                      child: _isLoading
+                      child: isLoading
                           ? const SizedBox(
                               width: 22,
                               height: 22,
