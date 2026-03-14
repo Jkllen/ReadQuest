@@ -3,36 +3,36 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:read_quest/services/auth_services.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  String _email = '';
-  String _password = '';
-  bool _isLoading = false;
+  String email = '';
+  String password = '';
+  bool loading = false;
 
-  String get email => _email;
-  String get password => _password;
-  bool get isLoading => _isLoading;
+  String get isEmail => email;
+  String get isPassword => password;
+  bool get isLoading => loading;
 
   void setEmail(String value) {
-    _email = value.trim();
+    email = value.trim();
     notifyListeners();
   }
 
   void setPassword(String value) {
-    _password = value;
+    password = value;
     notifyListeners();
   }
 
   Future<String?> login() async {
-    if (_email.isEmpty || _password.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       return 'Please fill in all fields';
     }
 
-    _isLoading = true;
+    loading = true;
     notifyListeners();
 
     try {
       final user = await AuthService().login(
-        email: _email,
-        password: _password,
+        email: email,
+        password: password,
       );
 
       if (user == null) {
@@ -50,7 +50,7 @@ class LoginViewModel extends ChangeNotifier {
     } catch (e) {
       return 'Login failed: $e';
     } finally {
-      _isLoading = false;
+      loading = false;
       notifyListeners();
     }
   }
