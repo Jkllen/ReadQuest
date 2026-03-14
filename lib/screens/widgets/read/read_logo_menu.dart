@@ -29,14 +29,25 @@ class ReadQuestLogoMenu extends StatelessWidget {
           ),
         ),
       ],
-      child: const Text(
-        'READ QUEST',
-        style: TextStyle(
-          color: Color(0xFF111391),
-          fontSize: 9,
-          fontFamily: 'Mojangles',
-        ),
+      child: const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LogoImage(),
+          SizedBox(height: 2),
+        ],
       ),
+    );
+  }
+}
+
+class LogoImage extends StatelessWidget {
+  const LogoImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      "assets/images/read_quest_logo_splash.png",
+      height: 65,
     );
   }
 }
