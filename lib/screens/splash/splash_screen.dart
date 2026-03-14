@@ -9,41 +9,41 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => SplashViewModel()..startLoading(context),
-      child: const _SplashView(),
+      child: const SplashView(),
     );
   }
 }
 
-class _SplashView extends StatefulWidget {
-  const _SplashView();
+class SplashView extends StatefulWidget {
+  const SplashView({super.key});
 
   @override
-  State<_SplashView> createState() => _SplashViewState();
+  State<SplashView> createState() => SplashViewState();
 }
 
-class _SplashViewState extends State<_SplashView>
+class SplashViewState extends State<SplashView>
     with SingleTickerProviderStateMixin {
 
-  late AnimationController _controller;
+  late AnimationController controller;
 
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
+    controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     );
 
 
-    _controller.repeat(reverse: true);
-    _controller.forward();
+    controller.repeat(reverse: true);
+    controller.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -72,10 +72,10 @@ class _SplashViewState extends State<_SplashView>
 
               // Animated Logo
               AnimatedBuilder(
-                animation: _controller,
+                animation: controller,
                 builder: (context, child) {
-                  final double bounce = 10 * (1 - (_controller.value - 0.5).abs() * 2);
-                  final double scale = 0.98 + 0.04 * (_controller.value);
+                  final double bounce = 10 * (1 - (controller.value - 0.5).abs() * 2);
+                  final double scale = 0.98 + 0.04 * (controller.value);
 
                   return Transform.translate(
                     offset: Offset(0, -bounce),
