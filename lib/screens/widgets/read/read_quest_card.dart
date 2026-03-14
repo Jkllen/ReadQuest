@@ -46,9 +46,8 @@ class ReadQuestCard extends StatelessWidget {
       onTap: onTap,
       child: Stack(
         children: [
-          // Card Box Chip
           Container(
-            height: 400,
+            height: 420,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(37),
@@ -67,8 +66,6 @@ class ReadQuestCard extends StatelessWidget {
                     topLeft: Radius.circular(37),
                     topRight: Radius.circular(37),
                   ),
-                  
-                  // Cover Img
                   child: SizedBox(
                     height: 210,
                     width: double.infinity,
@@ -126,7 +123,7 @@ class ReadQuestCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: diffColor.withValues(alpha:0.12),
+                                color: diffColor.withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -151,44 +148,77 @@ class ReadQuestCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          '+$rewardXp XP REWARD',
-                          style: const TextStyle(
-                            color: Color(0xFF155DFC),
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'IBM Plex Sans',
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Text(
-                              'PROGRESS',
-                              style: TextStyle(
-                                color: Color(0xFFBCBCBC),
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'IBM Plex Sans',
+                        const SizedBox(height: 5),
+                        Expanded(
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 50),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '+$rewardXp XP REWARD',
+                                      style: const TextStyle(
+                                        color: Color(0xFF155DFC),
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'IBM Plex Sans',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'PROGRESS',
+                                          style: TextStyle(
+                                            color: Color(0xFFBCBCBC),
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'IBM Plex Sans',
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Text(
+                                          '$percent%',
+                                          style: const TextStyle(
+                                            fontFamily: 'IBM Plex Sans',
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(999),
+                                      child: LinearProgressIndicator(
+                                        value: progress,
+                                        minHeight: 8,
+                                        backgroundColor: const Color(0xFFD9D9D9),
+                                        color: const Color(0xFF155DFC),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              '$percent%',
-                              style: const TextStyle(
-                                fontFamily: 'IBM Plex Sans',
-                                fontWeight: FontWeight.w600,
+                              Positioned(
+                                right: 50,
+                                bottom: 70,
+                                child: Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF155DFC),
+                                    borderRadius: BorderRadius.circular(11),
+                                  ),
+                                  child: const Icon(
+                                    Icons.play_arrow_rounded,
+                                    color: Colors.white,
+                                    size: 50,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(999),
-                          child: LinearProgressIndicator(
-                            value: progress,
-                            minHeight: 8,
-                            backgroundColor: const Color(0xFFD9D9D9),
-                            color: const Color(0xFF155DFC),
+                            ],
                           ),
                         ),
                       ],
