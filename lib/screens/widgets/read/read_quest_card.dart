@@ -24,7 +24,7 @@ class ReadQuestCard extends StatelessWidget {
     required this.onTap,
   });
 
-  Color _difficultyColor(String difficulty) {
+  Color difficultyColor(String difficulty) {
     switch (difficulty.toLowerCase()) {
       case 'easy':
         return const Color(0xFF05DF72);
@@ -40,7 +40,7 @@ class ReadQuestCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percent = (progress * 100).round();
-    final difficultyColor = _difficultyColor(difficulty);
+    final diffColor = difficultyColor(difficulty);
 
     return GestureDetector(
       onTap: onTap,
@@ -121,13 +121,13 @@ class ReadQuestCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: difficultyColor.withValues(alpha:0.12),
+                                color: diffColor.withValues(alpha:0.12),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
                                 difficulty.toUpperCase(),
                                 style: TextStyle(
-                                  color: difficultyColor,
+                                  color: diffColor,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
                                   fontFamily: 'IBM Plex Sans',

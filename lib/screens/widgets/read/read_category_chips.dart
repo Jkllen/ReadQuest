@@ -11,7 +11,7 @@ class ReadCategoryChips extends StatelessWidget {
     required this.onChanged,
   });
 
-  Widget _buildChip({
+  Widget buildChip({
     required String label,
     required bool selected,
     required VoidCallback onTap,
@@ -46,28 +46,28 @@ class ReadCategoryChips extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          _buildChip(
+          buildChip(
             label: 'All',
             selected: value == ReadCategory.all,
             onTap: () => onChanged(ReadCategory.all),
             width: 63,
           ),
           const SizedBox(width: 16),
-          _buildChip(
+          buildChip(
             label: 'Stories',
             selected: value == ReadCategory.stories,
             onTap: () => onChanged(ReadCategory.stories),
             width: 93,
           ),
           const SizedBox(width: 16),
-          _buildChip(
+          buildChip(
             label: 'Articles',
             selected: value == ReadCategory.articles,
             onTap: () => onChanged(ReadCategory.articles),
             width: 101,
           ),
           const SizedBox(width: 16),
-          _buildChip(
+          buildChip(
             label: 'Passages',
             selected: value == ReadCategory.passages,
             onTap: () => onChanged(ReadCategory.passages),
