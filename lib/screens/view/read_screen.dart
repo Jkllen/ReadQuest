@@ -21,7 +21,7 @@ class ReadScreen extends StatefulWidget {
 }
 
 class ReadScreenState extends State<ReadScreen> {
-  ReadCategory category = ReadCategory.all;
+  ReadCategory selectedCategory = ReadCategory.all;
 
   String? typeFilter(ReadCategory category) {
     switch (category) {
@@ -41,7 +41,7 @@ class ReadScreenState extends State<ReadScreen> {
         .collection('readings')
         .orderBy('order');
 
-    final type = typeFilter(category);
+    final type = typeFilter(selectedCategory);
     if (type != null) {
       query = query.where('type', isEqualTo: type);
     }
@@ -79,9 +79,9 @@ class ReadScreenState extends State<ReadScreen> {
             ),
             const SizedBox(height: 18),
             ReadCategoryChips(
-              value: category,
-              onChanged: (category) {
-                setState(() => category = category);
+              value: selectedCategory,
+              onChanged: (newCategory) {
+                setState(() => selectedCategory = newCategory);
               },
             ),
             const SizedBox(height: 18),
@@ -116,6 +116,9 @@ class ReadScreenState extends State<ReadScreen> {
                     itemBuilder: (context, index) {
                       final readingDoc = docs[index];
                       final data = readingDoc.data();
+
+                      debugPrint('READING DOC ID: ${readingDoc.id}');
+                      debugPrint('READING DATA: $data');
 
                       final title = (data['title'] ?? '').toString();
                       final author = (data['author'] ?? '').toString();
