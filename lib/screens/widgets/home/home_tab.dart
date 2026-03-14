@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/widgets/home/my_progress_section.dart';
-import 'package:read_quest/screens/widgets/home/read_quest_logo.dart';
 import 'package:read_quest/screens/widgets/home/start_quest_card.dart';
 import 'package:read_quest/screens/widgets/home/stat_card.dart';
 import 'package:read_quest/screens/widgets/home/streak_badge.dart';
 import 'package:read_quest/screens/widgets/home/user_greeting.dart';
 import 'package:read_quest/screens/widgets/home/xp_progress_bar.dart';
+import 'package:read_quest/screens/widgets/logo_menu.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -98,7 +98,7 @@ class HomeTab extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const ReadQuestLogo(),
+                      const ReadQuestLogoMenu(),
                       const SizedBox(width: 12),
                       Expanded(
                         child: UserGreeting(

@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ReadQuestLogo extends StatelessWidget {
-  const ReadQuestLogo({super.key});
+class ReadQuestLogoMenu extends StatelessWidget {
+  const ReadQuestLogoMenu({super.key});
 
   Future<void> confirmLogout(BuildContext context) async {
     final shouldLogout = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: const Text("Logout"),
         content: const Text("Are you sure you want to logout?"),
         actions: [
@@ -41,10 +41,8 @@ class ReadQuestLogo extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       onSelected: (value) async {
-        switch (value) {
-          case 'logout':
-            await confirmLogout(context);
-            break;
+        if (value == 'logout') {
+          await confirmLogout(context);
         }
       },
       itemBuilder: (context) => const [
