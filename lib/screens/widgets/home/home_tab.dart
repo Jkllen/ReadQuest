@@ -80,11 +80,6 @@ class HomeTab extends StatelessWidget {
         final int streakDays = asInt(data["streakDays"], fallback: 0);
         final int wordsLearned = asInt(data["wordsLearned"], fallback: 0);
 
-        final String stageTitle = asString(
-          data["currentStageTitle"],
-          fallback: "Stage title",
-        );
-
         return SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 20),
@@ -92,7 +87,6 @@ class HomeTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 14),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -110,9 +104,7 @@ class HomeTab extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 14),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: XpProgressBar(
@@ -120,21 +112,12 @@ class HomeTab extends StatelessWidget {
                     targetXp: targetXp,
                   ),
                 ),
-
                 const SizedBox(height: 14),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: StartQuestCard(
-                    stageTitle: stageTitle,
-                    onTap: () {
-                      debugPrint("Start Quest tapped");
-                    },
-                  ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: StartQuestCard(),
                 ),
-
                 const SizedBox(height: 14),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -161,9 +144,7 @@ class HomeTab extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 18),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: MyProgressSection(
