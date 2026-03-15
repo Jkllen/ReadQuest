@@ -9,6 +9,7 @@ class ReadingContentScreen extends StatefulWidget {
   final String summary;
   final String content;
   final int rewardXp;
+  final double initialProgress;
 
   const ReadingContentScreen({
     super.key,
@@ -18,6 +19,7 @@ class ReadingContentScreen extends StatefulWidget {
     required this.summary,
     required this.content,
     required this.rewardXp,
+    this.initialProgress = 0.0,
   });
 
   @override
@@ -28,15 +30,23 @@ class ReadingContentScreenState extends State<ReadingContentScreen> {
   final ScrollController scrollController = ScrollController();
   final ReadingContentViewModel viewModel = ReadingContentViewModel();
 
+  bool hasRestoredScroll = false;
+
   @override
   void initState() {
     super.initState();
+
     viewModel.initializeProgress(
       readingId: widget.readingId,
       title: widget.title,
       rewardXp: widget.rewardXp,
     );
+    
     scrollController.addListener(handleScroll);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      restoreSavedScrollPosition();
+    });
   }
 
   @override
@@ -46,16 +56,43 @@ class ReadingContentScreenState extends State<ReadingContentScreen> {
     super.dispose();
   }
 
+  void restoreSavedScrollPosition() {
+    if(!mounted || hasRestoredScroll) return;
+
+    if(!scrollController.hasClients) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        restoreSavedScrollPosition();
+      });
+      return;
+    }
+
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final normalizedProgress = widget.initialProgress.clamp(0.0, 1.0);
+
+    if(maxScroll <= 0 && normalizedProgress > 0) {
+      Future.delayed(const Duration(microseconds: 100), () {
+        restoreSavedScrollPosition();
+      });
+      return;
+    }
+
+    final targetOffset = (maxScroll * normalizedProgress).clamp(0.0, maxScroll);
+
+    if (targetOffset > 0) {
+      scrollController.jumpTo(targetOffset);
+    }
+
+    hasRestoredScroll = true;
+
+  }
+
   void handleScroll() {
     if (!scrollController.hasClients) return;
 
     final maxScroll = scrollController.position.maxScrollExtent;
     if (maxScroll <= 0) return;
 
-    final currentScroll = scrollController.position.pixels.clamp(
-      0.0,
-      maxScroll,
-    );
+    final currentScroll = scrollController.position.pixels.clamp(0.0, maxScroll,);
     final currentProgress = (currentScroll / maxScroll).clamp(0.0, 1.0);
 
     viewModel.onScrollProgressChanged(
