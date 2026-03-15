@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:read_quest/screens/view/read_screen.dart';
 import 'package:read_quest/screens/view/reading_content_screen.dart';
 import 'package:read_quest/services/home_progress_service.dart';
 
 class HomeViewModel {
   final HomeProgressService homeProgressService;
 
-  HomeViewModel({
-    HomeProgressService? homeProgressService,
-  }) : homeProgressService = homeProgressService ?? HomeProgressService();
+  HomeViewModel({HomeProgressService? homeProgressService})
+    : homeProgressService = homeProgressService ?? HomeProgressService();
 
-  String getHeadlineText(List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
+  String getHeadlineText(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
     return docs.isEmpty ? 'Start Your First Quest' : 'Continue Reading';
   }
 
@@ -19,7 +19,9 @@ class HomeViewModel {
     return docs.isEmpty ? 'Start Quest' : 'Continue';
   }
 
-  String getSubtitleText(List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
+  String getSubtitleText(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
     if (docs.isEmpty) {
       return 'Begin your first reading adventure.';
     }
@@ -33,13 +35,8 @@ class HomeViewModel {
     return (continueDoc.data()['title'] ?? 'Continue your quest').toString();
   }
 
-  Future<void> openReadScreen(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ReadScreen(),
-      ),
-    );
+  Future<void> openReadScreen(VoidCallback onOpenReadTab) async {
+    onOpenReadTab();
   }
 
   Future<void> openContinueReading(
@@ -55,7 +52,6 @@ class HomeViewModel {
 
     if (!readingSnapshot.exists) {
       if (!context.mounted) return;
-      await openReadScreen(context);
       return;
     }
 
@@ -87,16 +83,17 @@ class HomeViewModel {
   Future<void> handleStartQuestTap(
     BuildContext context,
     List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+    VoidCallback onOpenReadTab,
   ) async {
     if (docs.isEmpty) {
-      await openReadScreen(context);
+      await openReadScreen(onOpenReadTab);
       return;
     }
 
     final continueDoc = homeProgressService.findContinueProgress(docs);
 
     if (continueDoc == null) {
-      await openReadScreen(context);
+      await openReadScreen(onOpenReadTab);
       return;
     }
 

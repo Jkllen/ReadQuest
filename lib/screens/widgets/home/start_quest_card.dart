@@ -4,7 +4,12 @@ import 'package:read_quest/screens/viewmodel/home_view_model.dart';
 import 'package:read_quest/services/home_progress_service.dart';
 
 class StartQuestCard extends StatelessWidget {
-  const StartQuestCard({super.key});
+  final VoidCallback onOpenReadTab;
+
+  const StartQuestCard({
+    super.key,
+    required this.onOpenReadTab,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +105,7 @@ class StartQuestCard extends StatelessWidget {
                   onPressed: () => homeViewModel.handleStartQuestTap(
                     context,
                     docs,
+                    onOpenReadTab,
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,

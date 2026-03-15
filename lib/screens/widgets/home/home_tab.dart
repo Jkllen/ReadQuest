@@ -10,7 +10,12 @@ import 'package:read_quest/screens/widgets/home/xp_progress_bar.dart';
 import 'package:read_quest/screens/widgets/logo_menu.dart';
 
 class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
+  final VoidCallback onOpenReadTab;
+
+  const HomeTab({
+    super.key,
+    required this.onOpenReadTab,
+  });
 
   int asInt(dynamic value, {int fallback = 0}) {
     if (value is int) return value;
@@ -113,9 +118,11 @@ class HomeTab extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 14),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: StartQuestCard(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: StartQuestCard(
+                    onOpenReadTab: onOpenReadTab,
+                  ),
                 ),
                 const SizedBox(height: 14),
                 Padding(

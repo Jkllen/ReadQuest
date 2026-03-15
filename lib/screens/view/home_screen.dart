@@ -12,19 +12,21 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
 
-  final List<Widget> pages = const [
-    HomeTab(),
-    ReadScreen(),
-    Center(child: Text("Rewards Page")),
-    Center(child: Text("Stats Page")),
-  ];
-
   void onTap(int index) {
     setState(() => currentIndex = index);
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      HomeTab(
+        onOpenReadTab: () => onTap(1),
+      ),
+      const ReadScreen(),
+      const Center(child: Text("Rewards Page")),
+      const Center(child: Text("Stats Page")),
+    ];
+
     return Scaffold(
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
