@@ -168,6 +168,7 @@ class ReadScreenState extends State<ReadScreen> {
                                     summary: summary, 
                                     content: content,
                                     rewardXp: rewardXp,
+                                    initialProgress: progress.clamp(0.0, 1.0),
                                     ),
                                   ),
                               );
