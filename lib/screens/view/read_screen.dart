@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:read_quest/screens/view/reading_content_screen.dart';
 import 'package:read_quest/screens/widgets/read/read_category_chips.dart';
 import 'package:read_quest/screens/widgets/read/read_header.dart';
 import 'package:read_quest/screens/widgets/logo_menu.dart';
 import 'package:read_quest/screens/widgets/read/read_quest_card.dart';
+
 
 enum ReadCategory {
   all,
@@ -153,7 +155,22 @@ class ReadScreenState extends State<ReadScreen> {
                             onTap: () {
                               if (isLocked) return;
 
-                              debugPrint('Open reading: ${readingDoc.id}');
+                              final summary = (data['summary'] ?? '').toString();
+                              final content = (data['content'] ?? '').toString();
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReadingContentScreen(
+                                    readingId: readingDoc.id, 
+                                    title: title, 
+                                    author: author, 
+                                    summary: summary, 
+                                    content: content,
+                                    rewardXp: rewardXp,
+                                    ),
+                                  ),
+                              );
                             },
                           );
                         },
