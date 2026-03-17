@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/view/read_screen.dart';
+import 'package:read_quest/screens/view/rewards_screen.dart';
 import 'package:read_quest/screens/widgets/home/home_tab.dart';
 import 'package:read_quest/screens/view/stats_screen.dart';
 
@@ -24,6 +25,7 @@ class HomeScreenState extends State<HomeScreen> {
         onOpenReadTab: () => onTap(1),
       ),
       const ReadScreen(),
+      const RewardsScreen(),
       const StatsScreen(),
   
     ];
