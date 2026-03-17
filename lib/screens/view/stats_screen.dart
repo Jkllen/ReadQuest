@@ -24,26 +24,7 @@ class _StatsScreenState extends State<StatsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-        selectedItemColor: const Color(0xFF2078FC),
-        unselectedItemColor: const Color(0xFF999BA0),
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Read"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: "Rewards",
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
-        ],
-      ),
-    );
+    return Scaffold(backgroundColor: Colors.white, body: pages[_currentIndex]);
   }
 }
 
@@ -69,8 +50,6 @@ class StatsTab extends StatelessWidget {
         }
 
         final data = snapshot.data?.data() as Map<String, dynamic>? ?? {};
-
-        // --- DYNAMIC DATA EXTRACTION ---
 
         // 1. Skill Mastery
         final int comprehension = (data['comprehension'] ?? 0).toInt();
@@ -104,12 +83,12 @@ class StatsTab extends StatelessWidget {
               ? (rawWeeklyData[i] as num).toDouble()
               : 0.0;
           if (val > maxY) {
-            maxY = val + 1.0; // Auto-scale chart height if data is high
+            maxY = val + 1.0;
           }
           chartSpots.add(FlSpot(i.toDouble(), val));
         }
 
-        // Fallback to a flat line if data is missing or empty
+        // Fallback
         if (chartSpots.isEmpty) {
           chartSpots = List.generate(6, (index) => FlSpot(index.toDouble(), 0));
         }
@@ -174,7 +153,6 @@ class StatsTab extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      // Card Header
                       Row(
                         children: [
                           Container(
@@ -216,8 +194,7 @@ class StatsTab extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 24),
-
-                      // Wavy Line Chart
+                      // Chart
                       SizedBox(
                         height: 120,
                         width: double.infinity,
@@ -282,8 +259,12 @@ class StatsTab extends StatelessWidget {
                                   show: true,
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF3B82F6).withValues(alpha: 0.2),
-                                      const Color(0xFF3B82F6).withValues(alpha: 0.0),
+                                      const Color(
+                                        0xFF3B82F6,
+                                      ).withValues(alpha: 0.2),
+                                      const Color(
+                                        0xFF3B82F6,
+                                      ).withValues(alpha: 0.0),
                                     ],
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
