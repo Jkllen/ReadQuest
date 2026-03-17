@@ -2,48 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:read_quest/screens/widgets/logo_menu.dart';
 
-class StatsScreen extends StatefulWidget {
+class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
 
   @override
-  State<StatsScreen> createState() => _StatsScreenState();
-}
-
-class _StatsScreenState extends State<StatsScreen> {
-  int _currentIndex = 3;
-
-  final List<Widget> pages = const [
-    Center(child: Text("Home Page Placeholder")),
-    Center(child: Text("Read Page")),
-    Center(child: Text("Rewards Page")),
-    StatsTab(),
-  ];
-
-  void _onTap(int index) => setState(() => _currentIndex = index);
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-        selectedItemColor: const Color(0xFF2078FC),
-        unselectedItemColor: const Color(0xFF999BA0),
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Read"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: "Rewards",
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
-        ],
-      ),
-    );
+    return const StatsTab();
   }
 }
 
@@ -59,16 +25,24 @@ class StatsTab extends StatelessWidget {
     }
 
     return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .snapshots(),
+      stream: FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const SafeArea(
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return SafeArea(
+            child: Center(
+              child: Text("Error: ${snapshot.error}"),
+            ),
+          );
         }
 
         final data = snapshot.data?.data() as Map<String, dynamic>? ?? {};
+
 
         // --- DYNAMIC DATA EXTRACTION ---
 
@@ -76,7 +50,7 @@ class StatsTab extends StatelessWidget {
         final int comprehension = (data['comprehension'] ?? 0).toInt();
         final int vocabulary = (data['vocabulary'] ?? 0).toInt();
         final int readingSpeed = (data['readingSpeed'] ?? 0).toInt();
-
+        
         // 2. Weekly Growth Percentage
         final int weeklyGrowth = (data['weeklyGrowth'] ?? 0).toInt();
         final bool isPositiveGrowth = weeklyGrowth >= 0;
@@ -86,32 +60,36 @@ class StatsTab extends StatelessWidget {
         final Color growthColor = isPositiveGrowth
             ? const Color(0xFF22C55E)
             : const Color(0xFFEF4444);
-        final IconData growthIcon = isPositiveGrowth
-            ? Icons.trending_up
-            : Icons.trending_down;
+        final IconData growthIcon =
+            isPositiveGrowth ? Icons.trending_up : Icons.trending_down;
         final Color growthBgColor = isPositiveGrowth
             ? const Color(0xFFE8F5E9)
             : const Color(0xFFFEE2E2);
-
+        
         // 3. Weekly Progress Chart Data
         final List<dynamic> rawWeeklyData =
             data['weeklyProgress'] ?? [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
         List<FlSpot> chartSpots = [];
         double maxY = 5.0;
+
         for (int i = 0; i < rawWeeklyData.length; i++) {
-          double val = (rawWeeklyData[i] is num)
+          final double val = (rawWeeklyData[i] is num)
               ? (rawWeeklyData[i] as num).toDouble()
               : 0.0;
+
           if (val > maxY) {
-            maxY = val + 1.0; // Auto-scale chart height if data is high
+            maxY = val + 1.0;
           }
+
           chartSpots.add(FlSpot(i.toDouble(), val));
         }
-
         // Fallback to a flat line if data is missing or empty
         if (chartSpots.isEmpty) {
-          chartSpots = List.generate(6, (index) => FlSpot(index.toDouble(), 0));
+          chartSpots = List.generate(
+            6,
+            (index) => FlSpot(index.toDouble(), 0),
+          );
         }
 
         return SafeArea(
@@ -123,18 +101,13 @@ class StatsTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
-                    Image.asset(
-                      "assets/images/read_quest_logo_splash.png",
-                      height: 55,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.image, size: 55, color: Colors.grey),
-                    ),
-                    const SizedBox(width: 16),
+                    ReadQuestLogoMenu(),
+                    SizedBox(width: 16),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "Reading Quests",
                           style: TextStyle(
@@ -155,9 +128,7 @@ class StatsTab extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 32),
-
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -174,7 +145,6 @@ class StatsTab extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      // Card Header
                       Row(
                         children: [
                           Container(
@@ -214,7 +184,6 @@ class StatsTab extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 24),
 
                       // Wavy Line Chart
@@ -239,12 +208,12 @@ class StatsTab extends StatelessWidget {
                                       'Sat',
                                       'Sun',
                                     ];
+
                                     if (value.toInt() >= 0 &&
                                         value.toInt() < days.length) {
                                       return Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8.0,
-                                        ),
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Text(
                                           days[value.toInt()],
                                           style: TextStyle(
@@ -255,6 +224,7 @@ class StatsTab extends StatelessWidget {
                                         ),
                                       );
                                     }
+
                                     return const Text('');
                                   },
                                 ),
@@ -282,8 +252,10 @@ class StatsTab extends StatelessWidget {
                                   show: true,
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF3B82F6).withValues(alpha: 0.2),
-                                      const Color(0xFF3B82F6).withValues(alpha: 0.0),
+                                      const Color(0xFF3B82F6)
+                                          .withValues(alpha: 0.2),
+                                      const Color(0xFF3B82F6)
+                                          .withValues(alpha: 0.0),
                                     ],
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
@@ -299,9 +271,7 @@ class StatsTab extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 32),
-
                 const Text(
                   "Skills Mastery",
                   style: TextStyle(
@@ -310,10 +280,7 @@ class StatsTab extends StatelessWidget {
                     color: Color(0xFF1F2937),
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
-                // Skill Cards
                 SkillCard(
                   title: "Comprehension",
                   percentage: comprehension,
@@ -393,7 +360,6 @@ class SkillCard extends StatelessWidget {
             child: Icon(iconData, color: progressColor, size: 26),
           ),
           const SizedBox(width: 18),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
