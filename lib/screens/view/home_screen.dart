@@ -24,7 +24,7 @@ class HomeScreenState extends State<HomeScreen> {
       ),
       const ReadScreen(),
       const Center(child: Text("Rewards Page")),
-      const Center(child: Text("Stats Page")),
+  
     ];
 
     return Scaffold(
