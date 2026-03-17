@@ -39,3 +39,11 @@ flutter:
     - family: Tilt Warp
       fonts:
         - asset: assets/fonts/TiltWarp-Regular-VariableFont_XROT,YROT.ttf
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+
+    - family: Maname
+      fonts:
+        - asset: assets/fonts/Maname-Regular.ttf
