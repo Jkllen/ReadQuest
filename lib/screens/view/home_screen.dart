@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:read_quest/screens/view/stats_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _HomeTab(),
     Center(child: Text("Read Page")),
     Center(child: Text("Rewards Page")),
-    Center(child: Text("Stats Page")),
+    StatsTab(),
   ];
 
   void _onTap(int index) => setState(() => _currentIndex = index);
@@ -34,7 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Read"),
-          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: "Rewards"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard),
+            label: "Rewards",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
         ],
       ),
@@ -61,13 +65,13 @@ class _HomeTab extends StatelessWidget {
     final uid = FirebaseAuth.instance.currentUser?.uid;
 
     if (uid == null) {
-      return const SafeArea(
-        child: Center(child: Text("Not logged in.")),
-      );
+      return const SafeArea(child: Center(child: Text("Not logged in.")));
     }
 
-    final stream =
-        FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
+    final stream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots();
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: stream,
@@ -105,8 +109,10 @@ class _HomeTab extends StatelessWidget {
         final int streakDays = _asInt(data["streakDays"], fallback: 0);
         final int wordsLearned = _asInt(data["wordsLearned"], fallback: 0);
 
-        final String stageTitle =
-            _asString(data["currentStageTitle"], fallback: "Stage title");
+        final String stageTitle = _asString(
+          data["currentStageTitle"],
+          fallback: "Stage title",
+        );
 
         return SafeArea(
           child: SingleChildScrollView(
@@ -207,7 +213,7 @@ class _HomeTab extends StatelessWidget {
   }
 }
 
-// 
+//
 
 class ReadQuestLogo extends StatelessWidget {
   const ReadQuestLogo({super.key});
@@ -294,10 +300,7 @@ class ReadQuestLogo extends StatelessWidget {
       ],
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
-          _LogoImage(),
-          SizedBox(height: 2),
-        ],
+        children: const [_LogoImage(), SizedBox(height: 2)],
       ),
     );
   }
@@ -308,10 +311,7 @@ class _LogoImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      "assets/images/read_quest_logo_splash.png",
-      height: 65,
-    );
+    return Image.asset("assets/images/read_quest_logo_splash.png", height: 65);
   }
 }
 
@@ -362,11 +362,7 @@ class UserGreeting extends StatelessWidget {
   final String username;
   final int level;
 
-  const UserGreeting({
-    super.key,
-    required this.username,
-    required this.level,
-  });
+  const UserGreeting({super.key, required this.username, required this.level});
 
   String getLevelTitle(int level) {
     if (level == 0) return "Newbie";
@@ -427,8 +423,9 @@ class XpProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progress =
-        targetXp == 0 ? 0 : (currentXp / targetXp).clamp(0.0, 1.0);
+    final double progress = targetXp == 0
+        ? 0
+        : (currentXp / targetXp).clamp(0.0, 1.0);
 
     return Column(
       children: [
