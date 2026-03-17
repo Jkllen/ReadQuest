@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "170867652760",
+    "project_id": "read-quest-51cbb",
+    "storage_bucket": "read-quest-51cbb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170867652760:android:550215688b9278ad1638ed",
+        "android_client_info": {
+          "package_name": "com.hci.read_quest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0bA3BZvx8q_tB5qV464AJWrNHMiLW6VA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
