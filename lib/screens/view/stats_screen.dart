@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:read_quest/screens/view/home_screen.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -104,8 +103,9 @@ class StatsTab extends StatelessWidget {
           double val = (rawWeeklyData[i] is num)
               ? (rawWeeklyData[i] as num).toDouble()
               : 0.0;
-          if (val > maxY)
+          if (val > maxY) {
             maxY = val + 1.0; // Auto-scale chart height if data is high
+          }
           chartSpots.add(FlSpot(i.toDouble(), val));
         }
 
@@ -166,7 +166,7 @@ class StatsTab extends StatelessWidget {
                     border: Border.all(color: Colors.grey.shade200),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.02),
+                        color: Colors.black.withValues(alpha: 0.02),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -282,8 +282,8 @@ class StatsTab extends StatelessWidget {
                                   show: true,
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF3B82F6).withOpacity(0.2),
-                                      const Color(0xFF3B82F6).withOpacity(0.0),
+                                      const Color(0xFF3B82F6).withValues(alpha: 0.2),
+                                      const Color(0xFF3B82F6).withValues(alpha: 0.0),
                                     ],
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
@@ -375,7 +375,7 @@ class SkillCard extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.01),
+            color: Colors.black.withValues(alpha: 0.01),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
