@@ -18,7 +18,7 @@ class _StatsScreenState extends State<StatsScreen> {
     Center(child: Text("Home Page Placeholder")),
     Center(child: Text("Read Page")),
     Center(child: Text("Rewards Page")),
-    StatsTab()
+    StatsTab(),
   ];
 
   void _onTap(int index) => setState(() => _currentIndex = index);
@@ -37,7 +37,10 @@ class _StatsScreenState extends State<StatsScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Read"),
-          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: "Rewards"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard),
+            label: "Rewards",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
         ],
       ),
@@ -51,24 +54,25 @@ class StatsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uid = FirebaseAuth.instance.currentUser?.uid;
-    
+
     if (uid == null) {
-      return const SafeArea(
-        child: Center(child: Text("Not logged in.")),
-      );
+      return const SafeArea(child: Center(child: Text("Not logged in.")));
     }
 
     return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         final data = snapshot.data?.data() as Map<String, dynamic>? ?? {};
 
         // --- DYNAMIC DATA EXTRACTION ---
-        
+
         // 1. Skill Mastery
         final int comprehension = (data['comprehension'] ?? 0).toInt();
         final int vocabulary = (data['vocabulary'] ?? 0).toInt();
@@ -77,19 +81,31 @@ class StatsTab extends StatelessWidget {
         // 2. Weekly Growth Percentage
         final int weeklyGrowth = (data['weeklyGrowth'] ?? 0).toInt();
         final bool isPositiveGrowth = weeklyGrowth >= 0;
-        final String growthText = isPositiveGrowth ? "+$weeklyGrowth% from last week" : "$weeklyGrowth% from last week";
-        final Color growthColor = isPositiveGrowth ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
-        final IconData growthIcon = isPositiveGrowth ? Icons.trending_up : Icons.trending_down;
-        final Color growthBgColor = isPositiveGrowth ? const Color(0xFFE8F5E9) : const Color(0xFFFEE2E2);
+        final String growthText = isPositiveGrowth
+            ? "+$weeklyGrowth% from last week"
+            : "$weeklyGrowth% from last week";
+        final Color growthColor = isPositiveGrowth
+            ? const Color(0xFF22C55E)
+            : const Color(0xFFEF4444);
+        final IconData growthIcon = isPositiveGrowth
+            ? Icons.trending_up
+            : Icons.trending_down;
+        final Color growthBgColor = isPositiveGrowth
+            ? const Color(0xFFE8F5E9)
+            : const Color(0xFFFEE2E2);
 
-        // 3. Weekly Progress Chart Data 
-        final List<dynamic> rawWeeklyData = data['weeklyProgress'] ?? [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
-        
+        // 3. Weekly Progress Chart Data
+        final List<dynamic> rawWeeklyData =
+            data['weeklyProgress'] ?? [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+
         List<FlSpot> chartSpots = [];
         double maxY = 5.0;
         for (int i = 0; i < rawWeeklyData.length; i++) {
-          double val = (rawWeeklyData[i] is num) ? (rawWeeklyData[i] as num).toDouble() : 0.0;
-          if (val > maxY) maxY = val + 1.0; // Auto-scale chart height if data is high
+          double val = (rawWeeklyData[i] is num)
+              ? (rawWeeklyData[i] as num).toDouble()
+              : 0.0;
+          if (val > maxY)
+            maxY = val + 1.0; // Auto-scale chart height if data is high
           chartSpots.add(FlSpot(i.toDouble(), val));
         }
 
@@ -100,16 +116,19 @@ class StatsTab extends StatelessWidget {
 
         return SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 16.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Image.asset(
-                      "assets/images/read_quest_logo_splash.png", 
+                      "assets/images/read_quest_logo_splash.png",
                       height: 55,
-                      errorBuilder: (context, error, stackTrace) => 
+                      errorBuilder: (context, error, stackTrace) =>
                           const Icon(Icons.image, size: 55, color: Colors.grey),
                     ),
                     const SizedBox(width: 16),
@@ -136,7 +155,7 @@ class StatsTab extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 32),
 
                 Container(
@@ -155,16 +174,20 @@ class StatsTab extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      // Card Header 
+                      // Card Header
                       Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: growthBgColor, 
+                              color: growthBgColor,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Icon(growthIcon, color: growthColor, size: 24),
+                            child: Icon(
+                              growthIcon,
+                              color: growthColor,
+                              size: 24,
+                            ),
                           ),
                           const SizedBox(width: 16),
                           Column(
@@ -191,10 +214,10 @@ class StatsTab extends StatelessWidget {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
-                      // Wavy Line Chart 
+
+                      // Wavy Line Chart
                       SizedBox(
                         height: 120,
                         width: double.infinity,
@@ -208,13 +231,27 @@ class StatsTab extends StatelessWidget {
                                   reservedSize: 22,
                                   interval: 1,
                                   getTitlesWidget: (value, meta) {
-                                    const days = ['Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                                    if (value.toInt() >= 0 && value.toInt() < days.length) {
+                                    const days = [
+                                      'Tue',
+                                      'Wed',
+                                      'Thu',
+                                      'Fri',
+                                      'Sat',
+                                      'Sun',
+                                    ];
+                                    if (value.toInt() >= 0 &&
+                                        value.toInt() < days.length) {
                                       return Padding(
-                                        padding: const EdgeInsets.only(top: 8.0),
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                        ),
                                         child: Text(
-                                          days[value.toInt()], 
-                                          style: TextStyle(color: Colors.grey.shade500, fontSize: 11, fontWeight: FontWeight.w600)
+                                          days[value.toInt()],
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       );
                                     }
@@ -222,14 +259,20 @@ class StatsTab extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                              rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                              topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                              leftTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
                             ),
                             borderData: FlBorderData(show: false),
                             lineBarsData: [
                               LineChartBarData(
-                                spots: chartSpots, 
+                                spots: chartSpots,
                                 isCurved: true,
                                 color: const Color(0xFF3B82F6),
                                 barWidth: 3,
@@ -249,7 +292,7 @@ class StatsTab extends StatelessWidget {
                               ),
                             ],
                             minY: 0,
-                            maxY: maxY, 
+                            maxY: maxY,
                           ),
                         ),
                       ),
@@ -267,7 +310,7 @@ class StatsTab extends StatelessWidget {
                     color: Color(0xFF1F2937),
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
 
                 // Skill Cards
@@ -350,7 +393,7 @@ class SkillCard extends StatelessWidget {
             child: Icon(iconData, color: progressColor, size: 26),
           ),
           const SizedBox(width: 18),
-          
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -386,7 +429,7 @@ class SkillCard extends StatelessWidget {
                   ),
                   child: FractionallySizedBox(
                     alignment: Alignment.centerLeft,
-                    widthFactor: safePercentage, 
+                    widthFactor: safePercentage,
                     child: Container(
                       decoration: BoxDecoration(
                         color: progressColor,
