@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:read_quest/screens/widgets/logo_menu.dart';
+import 'package:read_quest/screens/widgets/stats/skill_card.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -284,25 +285,22 @@ class StatsTab extends StatelessWidget {
                 SkillCard(
                   title: "Comprehension",
                   percentage: comprehension,
-                  progressColor: const Color(0xFF3B82F6),
+                  accentColor: const Color(0xFF3B82F6),
                   iconData: Icons.menu_book_rounded,
-                  iconBgColor: const Color(0xFFEFF6FF),
                 ),
                 const SizedBox(height: 14),
                 SkillCard(
                   title: "Vocabulary",
                   percentage: vocabulary,
-                  progressColor: const Color(0xFFA855F7),
+                  accentColor: const Color(0xFFA855F7),
                   iconData: Icons.psychology_rounded,
-                  iconBgColor: const Color(0xFFFAF5FF),
                 ),
                 const SizedBox(height: 14),
                 SkillCard(
                   title: "Reading Speed",
                   percentage: readingSpeed,
-                  progressColor: const Color(0xFF10B981),
+                  accentColor: const Color(0xFF10B981),
                   iconData: Icons.wifi_tethering_rounded,
-                  iconBgColor: const Color(0xFFECFDF5),
                 ),
                 const SizedBox(height: 20),
               ],
@@ -310,105 +308,6 @@ class StatsTab extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class SkillCard extends StatelessWidget {
-  final String title;
-  final int percentage;
-  final Color progressColor;
-  final IconData iconData;
-  final Color iconBgColor;
-
-  const SkillCard({
-    super.key,
-    required this.title,
-    required this.percentage,
-    required this.progressColor,
-    required this.iconData,
-    required this.iconBgColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final double safePercentage = (percentage.clamp(0, 100)) / 100;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.01),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 52,
-            width: 52,
-            decoration: BoxDecoration(
-              color: iconBgColor,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(iconData, color: progressColor, size: 26),
-          ),
-          const SizedBox(width: 18),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF374151),
-                      ),
-                    ),
-                    Text(
-                      "$percentage%",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: progressColor,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  height: 8,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: safePercentage,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: progressColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
