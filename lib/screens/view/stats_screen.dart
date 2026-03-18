@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:read_quest/screens/widgets/logo_menu.dart';
 import 'package:read_quest/screens/widgets/stats/skill_card.dart';
+import 'package:read_quest/styles/card_styles.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -132,18 +133,7 @@ class StatsTab extends StatelessWidget {
                 const SizedBox(height: 32),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.grey.shade200),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.02),
-                        blurRadius: 15,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
+                  decoration: CardStyles.whiteCard,
                   child: Column(
                     children: [
                       Row(

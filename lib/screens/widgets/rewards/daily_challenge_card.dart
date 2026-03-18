@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/card_styles.dart';
 
 class DailyChallengeCard extends StatelessWidget {
   const DailyChallengeCard({
@@ -20,13 +21,7 @@ class DailyChallengeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4)),
-        ],
-      ),
+      decoration: CardStyles.whiteCard,
       child: Row(
         children: [
           Container(

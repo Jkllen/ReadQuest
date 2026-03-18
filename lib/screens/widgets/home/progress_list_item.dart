@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/card_styles.dart';
+
 
 class ProgressListItem extends StatelessWidget {
   final String title;
   final String valueText;
+
   final Color pillBg;
   final Color valueColor;
   final double valueFontSize;
@@ -21,11 +24,7 @@ class ProgressListItem extends StatelessWidget {
     return Container(
       height: 71,
       padding: const EdgeInsets.symmetric(horizontal: 18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(21),
-        border: Border.all(color: const Color(0xFFE2E2E2), width: 2),
-      ),
+      decoration: CardStyles.whiteCard,
       child: Row(
         children: [
           Text(
