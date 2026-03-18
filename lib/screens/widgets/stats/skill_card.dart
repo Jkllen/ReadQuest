@@ -21,7 +21,7 @@ class SkillCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      decoration: CardStyles.whiteCard,
+      decoration: CardStyles.borderCard(),
       child: Row(
         children: [
           Container(

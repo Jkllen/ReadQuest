@@ -24,7 +24,7 @@ class ProgressListItem extends StatelessWidget {
     return Container(
       height: 71,
       padding: const EdgeInsets.symmetric(horizontal: 18),
-      decoration: CardStyles.whiteCard,
+      decoration: CardStyles.borderCard(),
       child: Row(
         children: [
           Text(

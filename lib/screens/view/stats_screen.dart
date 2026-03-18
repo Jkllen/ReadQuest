@@ -133,7 +133,7 @@ class StatsTab extends StatelessWidget {
                 const SizedBox(height: 32),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  decoration: CardStyles.whiteCard,
+                  decoration: CardStyles.borderCard(),
                   child: Column(
                     children: [
                       Row(

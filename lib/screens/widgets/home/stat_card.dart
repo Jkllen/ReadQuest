@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/card_styles.dart';
 
 class StatCard extends StatelessWidget {
   final String value;
@@ -22,11 +23,7 @@ class StatCard extends StatelessWidget {
     return Container(
       height: 118,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(color: borderColor, width: 1),
-        borderRadius: BorderRadius.circular(20),
-      ),
+      decoration: CardStyles.borderCard(color: textColor),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,

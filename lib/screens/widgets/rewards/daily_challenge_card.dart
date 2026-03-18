@@ -21,7 +21,7 @@ class DailyChallengeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: CardStyles.whiteCard,
+      decoration: CardStyles.borderCard(),
       child: Row(
         children: [
           Container(
