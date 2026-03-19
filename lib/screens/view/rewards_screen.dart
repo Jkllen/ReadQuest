@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:read_quest/screens/widgets/logo_menu.dart';
 
 class RewardsScreen extends StatelessWidget {
-  const RewardsScreen({Key? key}) : super(key: key);
+  const RewardsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class RewardsScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF5B24E5).withOpacity(0.4),
+                color: const Color(0xFF5B24E5).withValues(alpha: 0.4),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
@@ -109,7 +109,7 @@ class RewardsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
                   value: 0.1, 
-                  backgroundColor: Colors.white.withOpacity(0.2),
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                   minHeight: 12,
                 ),
@@ -132,7 +132,7 @@ class RewardsScreen extends StatelessWidget {
           child: Icon(
             Icons.emoji_events, 
             size: 110, 
-            color: Colors.white.withOpacity(0.15), 
+            color: Colors.white.withValues(alpha: 0.15), 
           ),
         ),
       ],
@@ -177,7 +177,7 @@ class RewardsScreen extends StatelessWidget {
             border: Border.all(color: Colors.white, width: 3), 
             boxShadow: [
               BoxShadow(
-                color: isLocked ? Colors.grey.withOpacity(0.1) : color.withOpacity(0.4), 
+                color: isLocked ? Colors.grey.withValues(alpha: 0.1) : color.withValues(alpha: 0.4), 
                 blurRadius: 10, 
                 offset: const Offset(0, 4)
               )
@@ -213,7 +213,7 @@ class RewardsScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
-          BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4)),
+          BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4)),
         ],
       ),
       child: Row(
@@ -221,7 +221,7 @@ class RewardsScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1), 
+              color: iconColor.withValues(alpha: 0.1), 
               shape: BoxShape.circle
             ),
             child: Icon(icon, color: iconColor, size: 28),

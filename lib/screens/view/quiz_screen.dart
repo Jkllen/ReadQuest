@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/screens/view/boss_fight_screen.dart';
+
 
 class QuizScreen extends StatelessWidget {
   final String title;
@@ -149,10 +151,12 @@ class QuizScreen extends StatelessWidget {
                       width: double.infinity,
                       height: 64,
                       child: ElevatedButton(
+                        // Will change later to pushReplacement so user cant go back to quiz after boss fight 
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Boss battle placeholder'),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const BossFightScreen(),
                             ),
                           );
                         },
