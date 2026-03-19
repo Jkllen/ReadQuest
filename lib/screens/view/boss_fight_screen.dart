@@ -168,7 +168,7 @@ class BossFightScreen extends StatelessWidget {
                       
                       // Question Text
                       const Text(
-                        'What theme is strongly shown in the story?',
+                        'Question Here',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -178,13 +178,13 @@ class BossFightScreen extends StatelessWidget {
                       const SizedBox(height: 24),
 
                       // Answer Options
-                      _buildAnswerOption('Importance of fashion'),
+                      _buildAnswerOption('Choice 1 Here'),
                       const SizedBox(height: 12),
-                      _buildAnswerOption('The danger of pride and desire for status'),
+                      _buildAnswerOption('Choice 2 Here'),
                       const SizedBox(height: 12),
-                      _buildAnswerOption('The value of traveling'),
+                      _buildAnswerOption('Choice 3 Here'),
                       const SizedBox(height: 12),
-                      _buildAnswerOption('The power of selective desire'),
+                      _buildAnswerOption('Choice 4 Here'),
                     ],
                   ),
                 ),
