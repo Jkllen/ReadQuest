@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/viewmodel/reading_content_view_model.dart';
 import 'package:read_quest/styles/app_text_styles.dart';
+import 'package:read_quest/screens/view/difficulty_selection_screen.dart';
 
 class ReadingContentScreen extends StatefulWidget {
   final String readingId;
@@ -112,7 +113,14 @@ class ReadingContentScreenState extends State<ReadingContentScreen> {
 
     if (!mounted) return;
 
-    debugPrint('Take quiz for: ${widget.readingId}');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DifficultySelectionScreen(
+          title:widget.title,
+        ),
+      ),
+    );
   }
 
   @override
