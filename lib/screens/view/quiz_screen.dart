@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class QuizScreen extends StatelessWidget {
   final String title;
 
-  const QuizScreen({
-    super.key,
-    required this.title,
-  });
+  const QuizScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -35,40 +32,39 @@ class QuizScreen extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.arrow_back_ios_new_rounded),
                   ),
+
+                  // Divider / Progress line (center)
                   Expanded(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: 9,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFD9D9D9),
-                              borderRadius: BorderRadius.circular(21),
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                width: double.infinity,
-                                height: 9,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF4378FF),
-                                  borderRadius: BorderRadius.circular(21),
-                                ),
-                              ),
-                            ),
+                    child: Container(
+                      height: 6,
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD9D9D9),
+                        borderRadius: BorderRadius.circular(21),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          width: 0, // <-- later dynamic progress
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF4378FF),
+                            borderRadius: BorderRadius.circular(21),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          '0/0', // placeholder
-                          style: TextStyle(
-                            color: Color(0xFFA9A9A9),
-                            fontSize: 15,
-                            fontFamily: 'IBM Plex Sans',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  const Text(
+                    '0/0', // placeholder
+                    style: TextStyle(
+                      color: Color(0xFFA9A9A9),
+                      fontSize: 15,
+                      fontFamily: 'IBM Plex Sans',
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
