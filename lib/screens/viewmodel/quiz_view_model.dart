@@ -23,6 +23,15 @@ class QuizViewModel extends ChangeNotifier {
     required String difficulty,
   }) async {
     isLoading = true;
+
+    // Added a reset state before loading a new quiz
+    questions = [];
+    currentIndex = 0;
+    selectedAnswer = null;
+    answered = false;
+    score = 0;
+    subDifficulty = 'mid';
+
     notifyListeners();
 
     try {
@@ -48,7 +57,7 @@ class QuizViewModel extends ChangeNotifier {
   }
 
   Map<String, dynamic> get currentQuestionData {
-    if (questions.isEmpty) return {};
+    if (questions.isEmpty || currentIndex >= questions.length) return {};
     return questions[currentIndex].data();
   }
 
@@ -63,6 +72,9 @@ class QuizViewModel extends ChangeNotifier {
 
   String get explanation =>
       (currentQuestionData['explanation'] ?? '').toString();
+
+  String get skill =>
+      (currentQuestionData['skill'] ?? '').toString();
 
   String get progressText =>
       questions.isEmpty ? '0/0' : '${currentIndex + 1}/${questions.length}';
@@ -90,7 +102,7 @@ class QuizViewModel extends ChangeNotifier {
     required String readingId,
     required String difficulty,
   }) async {
-    if (!answered) return false;
+    if (!answered || questions.isEmpty) return false;
 
     if (isLastQuestion) {
       await quizService.saveQuizResult(
