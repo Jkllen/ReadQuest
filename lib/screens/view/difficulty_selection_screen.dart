@@ -3,11 +3,26 @@ import 'package:read_quest/screens/view/quiz_screen.dart';
 
 class DifficultySelectionScreen extends StatelessWidget {
   final String title;
+  final String readingId;
 
   const DifficultySelectionScreen({
     super.key,
     required this.title,
+    required this.readingId,
   });
+
+  void openQuiz(BuildContext context, String difficulty) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => QuizScreen(
+          title: title,
+          readingId: readingId,
+          difficulty: difficulty,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,43 +130,22 @@ class DifficultySelectionScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          _DifficultyButton(
+                          DifficultyButton(
                             label: 'EASY',
                             color: const Color(0xFF58ED78),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => QuizScreen(title: title),
-                                ),
-                              );
-                            },
+                            onTap: () => openQuiz(context, 'easy'),
                           ),
                           const SizedBox(height: 28),
-                          _DifficultyButton(
+                          DifficultyButton(
                             label: 'NORMAL',
                             color: const Color(0xFFF7B75E),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => QuizScreen(title: title),
-                                ),
-                              );
-                            },
+                            onTap: () => openQuiz(context, 'normal'),
                           ),
                           const SizedBox(height: 28),
-                          _DifficultyButton(
+                          DifficultyButton(
                             label: 'HARD',
                             color: const Color(0xFFE15050),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => QuizScreen(title: title),
-                                ),
-                              );
-                            },
+                            onTap: () => openQuiz(context, 'hard'),
                           ),
                         ],
                       ),
@@ -167,12 +161,13 @@ class DifficultySelectionScreen extends StatelessWidget {
   }
 }
 
-class _DifficultyButton extends StatelessWidget {
+class DifficultyButton extends StatelessWidget {
   final String label;
   final Color color;
   final VoidCallback onTap;
 
-  const _DifficultyButton({
+  const DifficultyButton({
+    super.key,
     required this.label,
     required this.color,
     required this.onTap,
