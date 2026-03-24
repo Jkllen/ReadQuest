@@ -23,7 +23,7 @@ class QuizScreen extends StatelessWidget {
           readingId: readingId,
           difficulty: difficulty,
         ),
-      child: _QuizScreenBody(
+      child: QuizScreenBody(
         title: title,
         readingId: readingId,
         difficulty: difficulty,
@@ -32,12 +32,13 @@ class QuizScreen extends StatelessWidget {
   }
 }
 
-class _QuizScreenBody extends StatelessWidget {
+class QuizScreenBody extends StatelessWidget {
   final String title;
   final String readingId;
   final String difficulty;
 
-  const _QuizScreenBody({
+  const QuizScreenBody({
+    super.key,
     required this.title,
     required this.readingId,
     required this.difficulty,
@@ -146,7 +147,6 @@ class _QuizScreenBody extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Question Container (EMPTY FOR NOW)
                     SizedBox(
                       width: double.infinity,
                       child: Text(
@@ -163,7 +163,7 @@ class _QuizScreenBody extends StatelessWidget {
 
                     const SizedBox(height: 42),
 
-                    // Choices (Placeholders)
+                    // Choices
                     ...viewModel.options.map(
                       (option) => Padding(
                         padding: const EdgeInsets.only(bottom: 27),
@@ -172,12 +172,14 @@ class _QuizScreenBody extends StatelessWidget {
                           isAnswered: viewModel.answered,
                           isSelected: viewModel.selectedAnswer == option,
                           isCorrect: option == correctAnswer,
-                          onTap: () => viewModel.selectAnswer(option),
+                          onTap: () async{
+                            viewModel.selectAnswer(option);
+                          },
                         ),
                       ),
                     ),
 
-                    // Feedback Container (Placeholder)
+                    // Feedback Container
                     if (viewModel.answered)
                       Container(
                         width: double.infinity,
@@ -272,7 +274,7 @@ class QuizOption extends StatelessWidget {
   final bool isAnswered;
   final bool isSelected;
   final bool isCorrect;
-  final VoidCallback onTap;
+  final Future<void> Function() onTap;
 
   const QuizOption({
     super.key,
@@ -301,7 +303,7 @@ class QuizOption extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: isAnswered ? null : onTap,
+        onTap: isAnswered ? null : () async {await onTap();},
         borderRadius: BorderRadius.circular(25),
         child: Container(
           width: double.infinity,

@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:read_quest/services/quiz_service.dart';
+import 'package:read_quest/services/user_services.dart';
+
 
 class QuizViewModel extends ChangeNotifier {
   final QuizService quizService;
+  final UserService userService;
 
-  QuizViewModel({QuizService? quizService})
-      : quizService = quizService ?? QuizService();
+  QuizViewModel({QuizService? quizService, UserService? userService})
+      : quizService = quizService ?? QuizService(),
+        userService = userService ?? UserService();
 
   bool isLoading = true;
   List<QueryDocumentSnapshot<Map<String, dynamic>>> questions = [];
@@ -85,7 +89,7 @@ class QuizViewModel extends ChangeNotifier {
   bool get isLastQuestion =>
       questions.isNotEmpty && currentIndex == questions.length - 1;
 
-  void selectAnswer(String option) {
+  Future<void> selectAnswer(String option) async{
     if (answered || questions.isEmpty) return;
 
     selectedAnswer = option;
@@ -93,6 +97,7 @@ class QuizViewModel extends ChangeNotifier {
 
     if (option == correctAnswer) {
       score++;
+      await userService.incrementSkillStat(skill: skill);
     }
 
     notifyListeners();
@@ -112,6 +117,19 @@ class QuizViewModel extends ChangeNotifier {
         score: score,
         totalQuestions: questions.length,
       );
+
+      await userService.updateWeeklyProgress(
+        score: score, 
+        totalQuestions: questions.length
+      );
+
+      await userService.updateWeeklyGrowth();
+
+      await userService.addQuizRewards(
+        xpAmount: score * 5,
+        wordsLearnedAmount: 1,
+      );
+
       return true;
     }
 
