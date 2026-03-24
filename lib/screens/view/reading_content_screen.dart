@@ -117,7 +117,8 @@ class ReadingContentScreenState extends State<ReadingContentScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => DifficultySelectionScreen(
-          title:widget.title,
+          title: widget.title,
+          readingId: widget.readingId,
         ),
       ),
     );
