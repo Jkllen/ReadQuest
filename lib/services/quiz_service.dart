@@ -42,11 +42,62 @@ class QuizService {
     return 'high';
   }
 
+  int getQuestionLimit({
+    required String difficulty,
+    required String subDifficulty,
+  }) {
+    switch (difficulty) {
+      case 'easy':
+        switch (subDifficulty) {
+          case 'low':
+            return 3;
+          case 'mid':
+            return 4;
+          case 'high':
+            return 5;
+          default:
+            return 4;
+        }
+
+      case 'normal':
+        switch (subDifficulty) {
+          case 'low':
+            return 4;
+          case 'mid':
+            return 5;
+          case 'high':
+            return 6;
+          default:
+            return 5;
+        }
+
+      case 'hard':
+        switch (subDifficulty) {
+          case 'low':
+            return 5;
+          case 'mid':
+            return 6;
+          case 'high':
+            return 7;
+          default:
+            return 6;
+        }
+
+      default:
+        return 4;
+    }
+  }
+
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getQuestions({
     required String readingId,
     required String difficulty,
     required String subDifficulty,
   }) async {
+    final questionLimit = getQuestionLimit(
+      difficulty: difficulty,
+      subDifficulty: subDifficulty,
+    );
+
     final snapshot = await firestore
         .collection('readings')
         .doc(readingId)
@@ -55,6 +106,7 @@ class QuizService {
         .collection('questions')
         .where('subDifficulty', isEqualTo: subDifficulty)
         .orderBy('order')
+        .limit(questionLimit)
         .get();
 
     return snapshot.docs;
