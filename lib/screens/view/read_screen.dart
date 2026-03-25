@@ -23,6 +23,7 @@ class ReadScreen extends StatefulWidget {
 
 class ReadScreenState extends State<ReadScreen> {
   ReadCategory selectedCategory = ReadCategory.all;
+  String searchQuery = "";
 
   String? typeFilter(ReadCategory category) {
     switch (category) {
@@ -48,6 +49,22 @@ class ReadScreenState extends State<ReadScreen> {
     }
 
     return query;
+  }
+
+  bool matchesSearch(Map<String, dynamic> data) {
+    if (searchQuery.trim().isEmpty) return true;
+
+    final query = searchQuery.toLowerCase().trim();
+
+    final title = (data['title'] ?? '').toString().toLowerCase();
+    final author = (data['author'] ?? '').toString().toLowerCase();
+    final type = (data['type'] ?? '').toString().toLowerCase();
+    final difficulty = (data['difficulty'] ?? '').toString().toLowerCase();
+
+    return title.contains(query) ||
+        author.contains(query) ||
+        type.contains(query) ||
+        difficulty.contains(query);
   }
 
   @override
@@ -83,6 +100,28 @@ class ReadScreenState extends State<ReadScreen> {
                 ],
               ),
               const SizedBox(height: 18),
+
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: 'Search quests...',
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: const Color(0xFFF5F7FB),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
               ReadCategoryChips(
                 value: selectedCategory,
                 onChanged: (newCategory) {
@@ -90,6 +129,7 @@ class ReadScreenState extends State<ReadScreen> {
                 },
               ),
               const SizedBox(height: 18),
+
               Expanded(
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: query.snapshots(),
@@ -107,20 +147,23 @@ class ReadScreenState extends State<ReadScreen> {
                     }
 
                     final docs = snapshot.data?.docs ?? [];
+                    final filteredDocs = docs.where((doc) {
+                      return matchesSearch(doc.data());
+                    }).toList();
 
-                    if (docs.isEmpty) {
+                    if (filteredDocs.isEmpty) {
                       return const Center(
-                        child: Text('No quests yet.'),
+                        child: Text('No matching quests found.'),
                       );
                     }
 
                     return ListView.separated(
                       padding: const EdgeInsets.only(bottom: 18),
-                      itemCount: docs.length,
+                      itemCount: filteredDocs.length,
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 16),
                       itemBuilder: (context, index) {
-                        final readingDoc = docs[index];
+                        final readingDoc = filteredDocs[index];
                         final data = readingDoc.data();
 
                         final title = (data['title'] ?? '').toString();
