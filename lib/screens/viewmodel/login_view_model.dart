@@ -21,9 +21,36 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isValidEmail(String value) {
+    final emailRegex = RegExp(
+      r'^[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(value);
+  }
+
   Future<String?> login() async {
-    if (email.isEmpty || password.isEmpty) {
-      return 'Please fill in all fields';
+    if (loading) return 'Login is already in progress.';
+
+    final trimmedEmail = email.trim();
+
+    if (trimmedEmail.isEmpty && password.isEmpty) {
+      return 'Please enter your email and password.';
+    }
+
+    if (trimmedEmail.isEmpty) {
+      return 'Please enter your email.';
+    }
+
+    if (password.isEmpty) {
+      return 'Please enter your password.';
+    }
+
+    if (!_isValidEmail(trimmedEmail)) {
+      return 'Please enter a valid email address.';
+    }
+
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters.';
     }
 
     loading = true;
@@ -31,7 +58,7 @@ class LoginViewModel extends ChangeNotifier {
 
     try {
       final user = await AuthService().login(
-        email: email,
+        email: trimmedEmail,
         password: password,
       );
 
@@ -39,16 +66,19 @@ class LoginViewModel extends ChangeNotifier {
         return 'Login failed. Please try again.';
       }
 
-      return null; 
+      return null;
     } on FirebaseAuthException catch (e) {
       return switch (e.code) {
         'user-not-found' => 'No account found for that email.',
-        'wrong-password' => 'Wrong password.',
+        'wrong-password' => 'Incorrect password.',
         'invalid-email' => 'Invalid email format.',
-        _ => 'Login failed: ${e.message}',
+        'invalid-credential' => 'Invalid email or password.',
+        'too-many-requests' => 'Too many attempts. Please try again later.',
+        'user-disabled' => 'This account has been disabled.',
+        _ => 'Login failed. Please try again.',
       };
-    } catch (e) {
-      return 'Login failed: $e';
+    } catch (_) {
+      return 'Something went wrong. Please try again.';
     } finally {
       loading = false;
       notifyListeners();
