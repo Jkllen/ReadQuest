@@ -4,10 +4,11 @@ read_quest
 ├─ .metadata
 ├─ analysis_options.yaml
 ├─ android
+├─ assets
+│  ├─ fonts
+│  └─ images
+├─ devtools_options.yaml
 ├─ firebase.json
-├─ FirebaseAdmin
-│  ├─ package-lock.json
-│  └─ package.json
 ├─ lib
 │  ├─ firebase_options.dart
 │  ├─ main.dart
@@ -56,11 +57,11 @@ read_quest
 │  │  └─ user_services.dart
 │  └─ styles
 │     └─ app_text_styles.dart
+├─ package-lock.json
+├─ package.json
 ├─ pubspec.lock
 ├─ pubspec.yaml
-├─ read-quest-51cbb-firebase-adminsdk-fbsvc-bf1b61339f.json
 ├─ README.md
-├─ seed_quiz.js
 ├─ setup.bat
 └─ test
 
