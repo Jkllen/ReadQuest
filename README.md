@@ -6,18 +6,8 @@ read_quest
 ├─ android
 ├─ assets
 │  ├─ fonts
-│  │  ├─ IBMPlexSans-Regular.ttf
-│  │  ├─ IBMPlexSerif-Bold.ttf
-│  │  ├─ IBMPlexSerif-Light.ttf
-│  │  ├─ IBMPlexSerif-Medium.ttf
-│  │  ├─ IBMPlexSerif-Regular.ttf
-│  │  ├─ IBMPlexSerif-SemiBold.ttf
-│  │  ├─ Maname-Regular.ttf
-│  │  ├─ mojangles.otf
-│  │  ├─ Poppins-Regular.ttf
-│  │  └─ TiltWarp-Regular-VariableFont_XROT,YROT.ttf
 │  └─ images
-│     └─ read_quest_logo_splash.png
+├─ devtools_options.yaml
 ├─ firebase.json
 ├─ lib
 │  ├─ firebase_options.dart
@@ -28,14 +18,20 @@ read_quest
 │  │  ├─ splash
 │  │  │  └─ splash_screen.dart
 │  │  ├─ view
+│  │  │  ├─ boss_fight_screen.dart
+│  │  │  ├─ difficulty_selection_screen.dart
 │  │  │  ├─ home_screen.dart
 │  │  │  ├─ login_screen.dart
+│  │  │  ├─ quiz_screen.dart
 │  │  │  ├─ reading_content_screen.dart
 │  │  │  ├─ read_screen.dart
-│  │  │  └─ register_screen.dart
+│  │  │  ├─ register_screen.dart
+│  │  │  ├─ rewards_screen.dart
+│  │  │  └─ stats_screen.dart
 │  │  ├─ viewmodel
 │  │  │  ├─ home_view_model.dart
 │  │  │  ├─ login_view_model.dart
+│  │  │  ├─ quiz_view_model.dart
 │  │  │  ├─ reading_content_view_model.dart
 │  │  │  └─ splash_view_model.dart
 │  │  └─ widgets
@@ -56,10 +52,13 @@ read_quest
 │  ├─ services
 │  │  ├─ auth_services.dart
 │  │  ├─ home_progress_service.dart
+│  │  ├─ quiz_service.dart
 │  │  ├─ reading_progress_service.dart
 │  │  └─ user_services.dart
 │  └─ styles
 │     └─ app_text_styles.dart
+├─ package-lock.json
+├─ package.json
 ├─ pubspec.lock
 ├─ pubspec.yaml
 ├─ README.md
