@@ -27,29 +27,27 @@ class MyProgressSection extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(height: 14),
-        ProgressListItem(
-          title: 'Current Level',
-          valueText: '$currentLevel',
-          pillBg: const Color(0xFFDBEAFE),
-          valueColor: const Color(0xFF432DD7),
-          valueFontSize: 18,
-        ),
-        const SizedBox(height: 14),
-        ProgressListItem(
-          title: 'Reading Streak',
-          valueText: '$streakDays days',
-          pillBg: const Color(0xFFFFEDD4),
-          valueColor: const Color(0xFFCD681F),
-          valueFontSize: 14,
-        ),
-        const SizedBox(height: 14),
-        ProgressListItem(
-          title: 'Words Learned',
-          valueText: '$wordsLearned',
-          pillBg: const Color(0xFFDBEAFE),
-          valueColor: const Color(0xFF432DD7),
-          valueFontSize: 18,
+        SizedBox(height: 12),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: [
+            ProgressListItem(
+              title: 'Current Level',
+              valueText: '$currentLevel',
+              valueColor: const Color(0xFF432DD7),
+            ),
+            ProgressListItem(
+              title: 'Reading Streak',
+              valueText: '$streakDays',
+              valueColor: const Color(0xFFCD681F),
+            ),
+            ProgressListItem(
+              title: 'Words Learned',
+              valueText: '$wordsLearned',
+              valueColor: const Color(0xFF432DD7),
+            ),
+          ],
         ),
       ],
     );
