@@ -6,6 +6,7 @@ import 'package:read_quest/screens/widgets/logo_menu.dart';
 import 'package:read_quest/screens/widgets/read/read_category_chips.dart';
 import 'package:read_quest/screens/widgets/read/read_header.dart';
 import 'package:read_quest/screens/widgets/read/read_quest_card.dart';
+import 'package:read_quest/styles/app_spacings.dart';
 
 enum ReadCategory {
   all,
@@ -120,7 +121,7 @@ class ReadScreenState extends State<ReadScreen> {
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: AppSpacings.section),
 
               ReadCategoryChips(
                 value: selectedCategory,
@@ -128,7 +129,7 @@ class ReadScreenState extends State<ReadScreen> {
                   setState(() => selectedCategory = newCategory);
                 },
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: AppSpacings.section),
 
               Expanded(
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -161,7 +162,7 @@ class ReadScreenState extends State<ReadScreen> {
                       padding: const EdgeInsets.only(bottom: 18),
                       itemCount: filteredDocs.length,
                       separatorBuilder: (context, index) =>
-                          const SizedBox(height: 16),
+                          const SizedBox(height: AppSpacings.section),
                       itemBuilder: (context, index) {
                         final readingDoc = filteredDocs[index];
                         final data = readingDoc.data();

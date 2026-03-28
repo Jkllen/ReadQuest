@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/widgets/home/progress_list_item.dart';
+import 'package:read_quest/styles/app_spacings.dart';
 
 class MyProgressSection extends StatelessWidget {
   final int currentLevel;
@@ -27,10 +28,10 @@ class MyProgressSection extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: AppSpacings.underTitle),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 12,
+          spacing: AppSpacings.betweenItems,
           children: [
             ProgressListItem(
               title: 'Current Level',

@@ -8,6 +8,7 @@ import 'package:read_quest/screens/widgets/home/streak_badge.dart';
 import 'package:read_quest/screens/widgets/home/user_greeting.dart';
 import 'package:read_quest/screens/widgets/home/xp_progress_bar.dart';
 import 'package:read_quest/screens/widgets/logo_menu.dart';
+import 'package:read_quest/styles/app_spacings.dart';
 
 class HomeTab extends StatelessWidget {
   final VoidCallback onOpenReadTab;
@@ -138,7 +139,7 @@ class HomeTab extends StatelessWidget {
                           textColor: const Color(0xFF8200DB),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: AppSpacings.betweenItems),
                       Expanded(
                         child: StatCard(
                           value: "$badgesWon",
@@ -151,7 +152,7 @@ class HomeTab extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: AppSpacings.section),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: MyProgressSection(
