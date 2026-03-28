@@ -79,11 +79,10 @@ class ReadScreenState extends State<ReadScreen> {
       backgroundColor: AppColors.homeBackground,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
+          padding: AppSpacings.homeTabPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 14),
               MenuHeader(
                 headerText: 'Reading Quests',
                 subHeaderText: 'Choose your adventure...',

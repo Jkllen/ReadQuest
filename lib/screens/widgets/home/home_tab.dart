@@ -123,11 +123,10 @@ class HomePage extends StatelessWidget {
       backgroundColor: AppColors.homeBackground,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+          padding: AppSpacings.homeTabPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 14),
               HomeHeader(username: username, level: level, streak: streak),
               const SizedBox(height: 14),
               XpProgressBar(currentXp: currentXp, targetXp: targetXp),

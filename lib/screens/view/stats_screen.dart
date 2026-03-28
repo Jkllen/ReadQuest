@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:read_quest/screens/widgets/menu_header.dart';
 import 'package:read_quest/screens/widgets/stats/skill_card.dart';
 import 'package:read_quest/styles/app_colors.dart';
+import 'package:read_quest/styles/app_spacings.dart';
 import 'package:read_quest/styles/card_styles.dart';
 
 class StatsScreen extends StatelessWidget {
@@ -97,10 +98,7 @@ class StatsTab extends StatelessWidget {
           backgroundColor: AppColors.homeBackground,
           body: SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 16.0,
-              ),
+              padding: AppSpacings.homeTabPadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

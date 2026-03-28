@@ -4,6 +4,7 @@ import 'package:read_quest/screens/widgets/rewards/daily_challenge_card.dart';
 import 'package:read_quest/screens/widgets/rewards/rewards_badge.dart';
 import 'package:read_quest/screens/widgets/rewards/rewards_progress_card.dart';
 import 'package:read_quest/styles/app_colors.dart';
+import 'package:read_quest/styles/app_spacings.dart';
 
 class RewardsScreen extends StatelessWidget {
   const RewardsScreen({super.key});
@@ -13,27 +14,27 @@ class RewardsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.homeBackground,
       body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 450),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          padding: AppSpacings.homeTabPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MenuHeader(
+                headerText: 'Reading Rewards',
+                subHeaderText: 'Collect badges and unlock new quests',
+              ),
+              const SizedBox(height: 24),
+              RewardsProgressCard(),
+              const SizedBox(height: 32),
+              _buildSectionTitle('My Badges'),
+              const SizedBox(height: 16),
+              _buildBadgesGrid(context),
+              const SizedBox(height: 32),
+              _buildSectionTitle('Daily Challenges'),
+              const SizedBox(height: 16),
+              Column(
+                spacing: 12.0,
                 children: [
-                  MenuHeader(
-                    headerText: 'Reading Rewards',
-                    subHeaderText: 'Collect badges and unlock new quests',
-                  ),
-                  const SizedBox(height: 24),
-                  RewardsProgressCard(),
-                  const SizedBox(height: 32),
-                  _buildSectionTitle('My Badges'),
-                  const SizedBox(height: 16),
-                  _buildBadgesGrid(context),
-                  const SizedBox(height: 32),
-                  _buildSectionTitle('Daily Challenges'),
-                  const SizedBox(height: 16),
                   DailyChallengeCard(
                     title: 'Complete 2 Quests',
                     reward: '+100 XP REWARD',
@@ -41,7 +42,6 @@ class RewardsScreen extends StatelessWidget {
                     icon: Icons.bolt,
                     iconColor: Colors.blue,
                   ),
-                  const SizedBox(height: 12),
                   DailyChallengeCard(
                     title: 'Complete 5 Quests',
                     reward: '+250 XP REWARD',
@@ -49,7 +49,6 @@ class RewardsScreen extends StatelessWidget {
                     icon: Icons.bolt,
                     iconColor: Colors.blue,
                   ),
-                  const SizedBox(height: 12),
                   DailyChallengeCard(
                     title: 'Complete 10 Quests',
                     reward: '+500 XP REWARD',
@@ -57,18 +56,16 @@ class RewardsScreen extends StatelessWidget {
                     icon: Icons.bolt,
                     iconColor: Colors.blue,
                   ),
-                  const SizedBox(height: 12),
                   DailyChallengeCard(
                     title: 'Complete 20 Quests',
                     reward: '+1000 XP REWARD',
                     progress: '0/20',
                     icon: Icons.bolt,
                     iconColor: Colors.blue,
-                  ),
-                  const SizedBox(height: 30),
+                  )
                 ],
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
