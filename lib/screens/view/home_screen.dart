@@ -27,7 +27,6 @@ class HomeScreenState extends State<HomeScreen> {
       const ReadScreen(),
       const RewardsScreen(),
       const StatsScreen(),
-  
     ];
 
     return Scaffold(

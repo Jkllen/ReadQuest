@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/view/reading_content_screen.dart';
-import 'package:read_quest/screens/widgets/logo_menu.dart';
+import 'package:read_quest/screens/widgets/menu_header.dart';
 import 'package:read_quest/screens/widgets/read/read_category_chips.dart';
-import 'package:read_quest/screens/widgets/read/read_header.dart';
 import 'package:read_quest/screens/widgets/read/read_quest_card.dart';
 import 'package:read_quest/styles/app_spacings.dart';
 
@@ -93,15 +92,8 @@ class ReadScreenState extends State<ReadScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 14),
-              const Row(
-                children: [
-                  ReadQuestLogoMenu(),
-                  SizedBox(width: 12),
-                  Expanded(child: ReadHeader()),
-                ],
-              ),
+              MenuHeader(headerText: 'Reading Quests', subHeaderText: 'Choose your adventure...'),
               const SizedBox(height: 18),
-
               TextField(
                 onChanged: (value) {
                   setState(() {

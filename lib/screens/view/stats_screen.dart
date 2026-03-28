@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:read_quest/screens/widgets/logo_menu.dart';
+import 'package:read_quest/screens/widgets/menu_header.dart';
 import 'package:read_quest/screens/widgets/stats/skill_card.dart';
 import 'package:read_quest/styles/card_styles.dart';
 
@@ -103,32 +103,9 @@ class StatsTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
-                  children: [
-                    ReadQuestLogoMenu(),
-                    SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Reading Quests",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        Text(
-                          "Mission Statistics",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                MenuHeader(
+                  headerText: 'Reading Statistics', 
+                  subHeaderText: 'View your progress',
                 ),
                 const SizedBox(height: 32),
                 Container(

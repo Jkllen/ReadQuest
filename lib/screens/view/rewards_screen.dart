@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:read_quest/screens/widgets/logo_menu.dart';
+import 'package:read_quest/screens/widgets/menu_header.dart';
 import 'package:read_quest/screens/widgets/rewards/daily_challenge_card.dart';
 import 'package:read_quest/screens/widgets/rewards/rewards_badge.dart';
 import 'package:read_quest/screens/widgets/rewards/rewards_progress_card.dart';
@@ -16,11 +16,14 @@ class RewardsScreen extends StatelessWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 450), 
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeader(),
+                  MenuHeader(
+                    headerText: 'Reading Rewards', 
+                    subHeaderText: 'Collect badges and unlock new quests'
+                  ),
                   const SizedBox(height: 24),
                   RewardsProgressCard(),
                   const SizedBox(height: 32),
@@ -44,36 +47,6 @@ class RewardsScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Row(
-      children: [
-        const ReadQuestLogoMenu(), 
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                'Reading Quests',
-                style: TextStyle(
-                  fontSize: 24, 
-                  fontWeight: FontWeight.bold, 
-                ),
-              ),
-              Text(
-                'Collect badges and unlock new quests',
-                style: TextStyle(
-                  fontSize: 14, 
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
