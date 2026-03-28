@@ -6,6 +6,7 @@ import 'package:read_quest/screens/widgets/home/start_quest_card.dart';
 import 'package:read_quest/screens/widgets/home/stat_card.dart';
 import 'package:read_quest/screens/widgets/home/home_header.dart';
 import 'package:read_quest/screens/widgets/home/xp_progress_bar.dart';
+import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/app_spacings.dart';
 
 class HomeTab extends StatelessWidget {
@@ -118,41 +119,44 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 14),
-            HomeHeader(username: username, level: level, streak: streak),
-            const SizedBox(height: 14),
-            XpProgressBar(currentXp: currentXp, targetXp: targetXp),
-            const SizedBox(height: 14),
-            StartQuestCard(onOpenReadTab: onOpenReadTab),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                StatCard(
+    return Scaffold(
+      backgroundColor: AppColors.homeBackground,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 14),
+              HomeHeader(username: username, level: level, streak: streak),
+              const SizedBox(height: 14),
+              XpProgressBar(currentXp: currentXp, targetXp: targetXp),
+              const SizedBox(height: 14),
+              StartQuestCard(onOpenReadTab: onOpenReadTab),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  StatCard(
                     value: "$totalXpEarned",
                     label: "Total XP Earned",
                     accentColor: const Color(0xFF8200DB),
                   ),
-                const SizedBox(width: AppSpacings.betweenItems),
-                StatCard(
+                  const SizedBox(width: AppSpacings.betweenItems),
+                  StatCard(
                     value: "$badgesWon",
                     label: "Badges Won",
                     accentColor: const Color(0xFF1E914E),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacings.section),
-            MyProgressSection(
-              currentLevel: level,
-              streakDays: streakDays,
-              wordsLearned: wordsLearned,
-            ),
-          ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacings.section),
+              MyProgressSection(
+                currentLevel: level,
+                streakDays: streakDays,
+                wordsLearned: wordsLearned,
+              ),
+            ],
+          ),
         ),
       ),
     );
