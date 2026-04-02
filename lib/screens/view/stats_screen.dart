@@ -109,7 +109,7 @@ class StatsTab extends StatelessWidget {
                   const SizedBox(height: 32),
                   Container(
                     padding: const EdgeInsets.all(20),
-                    decoration: CardStyles.borderCard(),
+                    decoration: CardStyles.borderCard(color: growthColor),
                     child: Column(
                       children: [
                         Row(
@@ -117,12 +117,12 @@ class StatsTab extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: growthBgColor,
+                                color: Colors.white24,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
                                 growthIcon,
-                                color: growthColor,
+                                color: Colors.white,
                                 size: 24,
                               ),
                             ),
@@ -136,14 +136,14 @@ class StatsTab extends StatelessWidget {
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
                                     letterSpacing: 0.5,
-                                    color: Color(0xFF1F2937),
+                                    color: Colors.white,
                                   ),
                                 ),
                                 Text(
                                   growthText,
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: growthColor,
+                                    color: Colors.white70,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -212,7 +212,7 @@ class StatsTab extends StatelessWidget {
                                 LineChartBarData(
                                   spots: chartSpots,
                                   isCurved: true,
-                                  color: const Color(0xFF3B82F6),
+                                  color: Colors.black87,
                                   barWidth: 3,
                                   isStrokeCapRound: true,
                                   dotData: const FlDotData(show: false),
@@ -220,12 +220,8 @@ class StatsTab extends StatelessWidget {
                                     show: true,
                                     gradient: LinearGradient(
                                       colors: [
-                                        const Color(
-                                          0xFF3B82F6,
-                                        ).withValues(alpha: 0.2),
-                                        const Color(
-                                          0xFF3B82F6,
-                                        ).withValues(alpha: 0.0),
+                                        Colors.black12,
+                                        Colors.transparent,
                                       ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,

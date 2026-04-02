@@ -21,17 +21,17 @@ class SkillCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      decoration: CardStyles.borderCard(),
+      decoration: CardStyles.borderCard(color: accentColor),
       child: Row(
         children: [
           Container(
             height: 52,
             width: 52,
             decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.075),
+              color: Colors.white24,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(iconData, color: accentColor, size: 26),
+            child: Icon(iconData, color: Colors.white, size: 26),
           ),
           const SizedBox(width: 18),
           Expanded(
@@ -45,16 +45,16 @@ class SkillCard extends StatelessWidget {
                       title,
                       style: const TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF374151),
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
                       ),
                     ),
                     Text(
                       "$percentage%",
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: accentColor,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white70,
                       ),
                     ),
                   ],
@@ -64,7 +64,7 @@ class SkillCard extends StatelessWidget {
                   height: 8,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
+                    color: Colors.white30,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: FractionallySizedBox(
@@ -72,7 +72,7 @@ class SkillCard extends StatelessWidget {
                     widthFactor: safePercentage,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: accentColor,
+                        color: Colors.white54,
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
