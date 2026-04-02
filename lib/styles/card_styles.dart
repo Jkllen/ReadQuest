@@ -11,12 +11,12 @@ class CardStyles {
     }
 
     return BoxDecoration(
-      color: clampHSL(color, lightness: 0.92, saturation: 0.40),
+      color: clampHSL(color, lightness: 0.5),
       borderRadius: BorderRadius.circular(20),
-      border: Border.all(
-        color: clampHSL(color, lightness: 0.6, saturation: 0.5),
-        width: 1,
-      ),
+      // border: Border.all(
+      //   color: clampHSL(color, lightness: 0.6, saturation: 0.5),
+      //   width: 1,
+      // ),
     );
   }
 
@@ -41,10 +41,22 @@ class CardStyles {
 
   static Color clampHSL(
     Color color, {
-    double lightness = 0.95,
-    double saturation = 0.05,
+    double lightness = -1,
+    double saturation = -1,
   }) {
     HSLColor hsl = HSLColor.fromColor(color);
+
+    if (lightness != -1) {
+      lightness = lightness.clamp(0.0, 1.0);
+    } else {
+      lightness = hsl.lightness;
+    }
+
+    if (saturation != -1) {
+      saturation = saturation.clamp(0.0, 1.0);
+    } else {
+      saturation = hsl.saturation;
+    }
 
     return hsl.withLightness(lightness).withSaturation(saturation).toColor();
   }

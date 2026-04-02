@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:read_quest/screens/widgets/home/my_progress_section.dart';
 import 'package:read_quest/screens/widgets/home/start_quest_card.dart';
 import 'package:read_quest/screens/widgets/home/stat_card.dart';
 import 'package:read_quest/screens/widgets/home/home_header.dart';
@@ -134,13 +133,13 @@ class HomePage extends StatelessWidget {
               StartQuestCard(onOpenReadTab: onOpenReadTab),
               const SizedBox(height: 14),
               Row(
+                spacing: AppSpacings.betweenItems,
                 children: [
                   StatCard(
                     value: "$totalXpEarned",
                     label: "Total XP Earned",
                     accentColor: const Color(0xFF8200DB),
                   ),
-                  const SizedBox(width: AppSpacings.betweenItems),
                   StatCard(
                     value: "$badgesWon",
                     label: "Badges Won",
@@ -149,10 +148,35 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacings.section),
-              MyProgressSection(
-                currentLevel: level,
-                streakDays: streakDays,
-                wordsLearned: wordsLearned,
+              const Text(
+                'My Progress',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontFamily: 'IBM Plex Sans',
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: AppSpacings.underTitle),
+              Row(
+                spacing: AppSpacings.betweenItems,
+                children: [
+                  StatCard(
+                    label: 'Current Level',
+                    value: '$level',
+                    accentColor: const Color(0xFF432DD7),
+                  ),
+                  StatCard(
+                    label: 'Reading Streak',
+                    value: '$streakDays',
+                    accentColor: const Color(0xFFCD681F),
+                  ),
+                  StatCard(
+                    label: 'Words Learned',
+                    value: '$wordsLearned',
+                    accentColor: const Color(0xFF432DD7),
+                  ),
+                ],
               ),
             ],
           ),

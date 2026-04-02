@@ -5,12 +5,14 @@ class StatCard extends StatelessWidget {
   final String value;
   final String label;
   final Color accentColor;
+  final CrossAxisAlignment textAlign;
 
   const StatCard({
     super.key,
     required this.value,
     required this.label,
     required this.accentColor,
+    this.textAlign = CrossAxisAlignment.start,
   });
 
   @override
@@ -22,15 +24,15 @@ class StatCard extends StatelessWidget {
         decoration: CardStyles.borderCard(color: accentColor),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: textAlign,
           children: [
             Text(
               value,
               style: TextStyle(
-                color: accentColor,
+                color: Colors.white,
                 fontSize: 32,
                 fontFamily: 'IBM Plex Sans',
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 height: 1.0,
               ),
             ),
@@ -38,10 +40,10 @@ class StatCard extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: accentColor,
-                fontSize: 13,
+                color: Colors.white,
+                fontSize: 14,
                 fontFamily: 'IBM Plex Sans',
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ],
