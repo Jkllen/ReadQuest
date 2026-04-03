@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/widgets/home/streak_badge.dart';
 import 'package:read_quest/screens/widgets/menu_header.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class HomeHeader extends StatelessWidget {
   final String username;
@@ -33,7 +34,7 @@ class HomeHeader extends StatelessWidget {
         fontWeight: FontWeight.w700,
       ),
       subHeaderStyle: const TextStyle(
-        color: Color(0xFF00ACF6),
+        color: AppColors.accent,
         fontSize: 14,
         fontFamily: 'Maname',
         fontWeight: FontWeight.w700,

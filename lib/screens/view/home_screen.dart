@@ -3,6 +3,7 @@ import 'package:read_quest/screens/view/home_tabs/read_tab.dart';
 import 'package:read_quest/screens/view/home_tabs/rewards_tab.dart';
 import 'package:read_quest/screens/view/home_tabs/dashboard_tab.dart';
 import 'package:read_quest/screens/view/home_tabs/stats_tab.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -48,27 +49,11 @@ class HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: pages[currentIndex],
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: currentIndex,
-      //   onTap: onTap,
-      //   selectedItemColor: const Color(0xFF2078FC),
-      //   unselectedItemColor: const Color(0xFF999BA0),
-      //   type: BottomNavigationBarType.fixed,
-      //   items: const [
-      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      //     BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "Read"),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.card_giftcard),
-      //       label: "Rewards",
-      //     ),
-      //     BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Stats"),
-      //   ],
-      // ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: onTap,
         indicatorColor: const Color(0x33000000),
-        backgroundColor: const Color(0xFF2078FC),
+        backgroundColor: AppColors.accent,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         labelTextStyle: WidgetStatePropertyAll(
           const TextStyle(color: Colors.white),

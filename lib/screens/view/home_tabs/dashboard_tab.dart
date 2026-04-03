@@ -138,12 +138,12 @@ class DashboardPage extends StatelessWidget {
                   StatCard(
                     value: "$totalXpEarned",
                     label: "Total XP Earned",
-                    accentColor: const Color(0xFF8200DB),
+                    accentColor: AppColors.home.xpCard,
                   ),
                   StatCard(
                     value: "$badgesWon",
                     label: "Badges Won",
-                    accentColor: const Color(0xFF1E914E),
+                    accentColor: AppColors.home.badgeCard,
                   ),
                 ],
               ),
@@ -164,17 +164,17 @@ class DashboardPage extends StatelessWidget {
                   StatCard(
                     label: 'Current Level',
                     value: '$level',
-                    accentColor: const Color(0xFF432DD7),
+                    accentColor: AppColors.home.levelCard,
                   ),
                   StatCard(
                     label: 'Reading Streak',
                     value: '$streakDays',
-                    accentColor: const Color(0xFFCD681F),
+                    accentColor: AppColors.home.streakCard,
                   ),
                   StatCard(
                     label: 'Words Learned',
                     value: '$wordsLearned',
-                    accentColor: const Color(0xFF432DD7),
+                    accentColor: AppColors.home.wordsCard,
                   ),
                 ],
               ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/viewmodel/home_view_model.dart';
 import 'package:read_quest/services/home_progress_service.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class StartQuestCard extends StatelessWidget {
   final VoidCallback onOpenReadTab;
@@ -30,7 +31,7 @@ class StartQuestCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF155DFC),
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(24),
             ),
             child: const Center(
@@ -44,7 +45,7 @@ class StartQuestCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF155DFC),
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(24),
             ),
             child: const Text(
@@ -67,11 +68,11 @@ class StartQuestCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF155DFC),
+            color: AppColors.accent,
             borderRadius: BorderRadius.circular(24),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Color(0x40155DFC),
+                color: AppColors.accent.withAlpha(64),
                 blurRadius: 18,
                 offset: Offset(0, 10),
               ),
@@ -109,7 +110,7 @@ class StartQuestCard extends StatelessWidget {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF155DFC),
+                    foregroundColor: AppColors.accent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),

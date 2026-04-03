@@ -53,8 +53,8 @@ class StatsTab extends StatelessWidget {
             ? "+$weeklyGrowth% from last week"
             : "$weeklyGrowth% from last week";
         final Color growthColor = isPositiveGrowth
-            ? const Color(0xFF22C55E)
-            : const Color(0xFFEF4444);
+            ? AppColors.stats.positiveGrowth
+            : AppColors.stats.negativeGrowth;
         final IconData growthIcon = isPositiveGrowth
             ? Icons.trending_up
             : Icons.trending_down;
@@ -238,21 +238,21 @@ class StatsTab extends StatelessWidget {
                   SkillCard(
                     title: "Comprehension",
                     percentage: comprehension,
-                    accentColor: const Color(0xFF3B82F6),
+                    accentColor: AppColors.stats.comprehensionCard,
                     iconData: Icons.menu_book_rounded,
                   ),
                   const SizedBox(height: 14),
                   SkillCard(
                     title: "Vocabulary",
                     percentage: vocabulary,
-                    accentColor: const Color(0xFFA855F7),
+                    accentColor: AppColors.stats.vocabularyCard,
                     iconData: Icons.psychology_rounded,
                   ),
                   const SizedBox(height: 14),
                   SkillCard(
                     title: "Reading Speed",
                     percentage: readingSpeed,
-                    accentColor: const Color(0xFF10B981),
+                    accentColor: AppColors.stats.speedCard,
                     iconData: Icons.wifi_tethering_rounded,
                   ),
                   const SizedBox(height: 20),

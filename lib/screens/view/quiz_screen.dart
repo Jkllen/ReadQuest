@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:read_quest/screens/view/boss_fight_screen.dart';
 import 'package:read_quest/screens/viewmodel/quiz_view_model.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class QuizScreen extends StatelessWidget {
   final String title;
@@ -118,7 +119,7 @@ class QuizScreenBody extends StatelessWidget {
                           child: Container(
                             height: 6,
                             decoration: BoxDecoration(
-                              color: const Color(0xFF4378FF),
+                              color: AppColors.accent,
                               borderRadius: BorderRadius.circular(21),
                             ),
                           ),
@@ -185,23 +186,23 @@ class QuizScreenBody extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: viewModel.selectedAnswer == correctAnswer
-                              ? const Color(0xFFF0FDF4)
-                              : const Color(0xFFFEF2F2),
+                          color: (viewModel.selectedAnswer == correctAnswer
+                              ? AppColors.quiz.correct
+                              : AppColors.quiz.incorrect).withAlpha(24),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             width: 1.48,
-                            color: viewModel.selectedAnswer == correctAnswer
-                                ? const Color(0xFFDCFCE7)
-                                : const Color(0xFFFECACA),
+                            color: (viewModel.selectedAnswer == correctAnswer
+                                ? AppColors.quiz.correct
+                                : AppColors.quiz.incorrect).withAlpha(48),
                           ),
                         ),
                         child: Text(
                           viewModel.explanation,
                           style: TextStyle(
                             color: viewModel.selectedAnswer == correctAnswer
-                                ? const Color(0xFF016630)
-                                : const Color(0xFF991B1B),
+                                ? AppColors.quiz.correct
+                                : AppColors.quiz.incorrect,
                             fontSize: 14,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
@@ -292,11 +293,11 @@ class QuizOption extends StatelessWidget {
 
     if (isAnswered) {
       if (isCorrect) {
-        borderColor = const Color(0xFF2FA938);
-        textColor = const Color(0xFF31C142);
+        borderColor = AppColors.quiz.correct;
+        textColor = AppColors.quiz.correct;
       } else if (isSelected) {
-        borderColor = const Color(0xFFE15050);
-        textColor = const Color(0xFFE15050);
+        borderColor = AppColors.quiz.incorrect;
+        textColor = AppColors.quiz.incorrect;
       }
     }
 

@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class BossFightScreen extends StatelessWidget {
   const BossFightScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Defining colors used in the design based on the magical palette
-    const Color bgStartColor = Color(0xFF160A34); 
-    const Color bgEndColor = Color(0xFF2A1054); 
-    const Color cardColor = Color(0xFF1C1337); 
-    const Color heroBlue = Color(0xFF4A67E2); 
-    const Color bossMagenta = Color(0xFFD61868); 
-
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [bgStartColor, bgEndColor],
+            colors: [AppColors.boss.bgStartColor, AppColors.boss.bgEndColor],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 16.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -40,17 +37,17 @@ class BossFightScreen extends StatelessWidget {
                   children: [
                     _buildHealthBar(
                       icon: Icons.shield,
-                      color: heroBlue,
+                      color: AppColors.boss.heroBlue,
                       label: 'HERO: YUAN',
-                      progress: 1.0, 
+                      progress: 1.0,
                       isLeft: true,
                     ),
                     const SizedBox(width: 20),
                     _buildHealthBar(
-                      icon: Icons.colorize, 
-                      color: bossMagenta,
+                      icon: Icons.colorize,
+                      color: AppColors.boss.bossMagenta,
                       label: 'BOSS: SHADOW LEXICON',
-                      progress: 0.3, 
+                      progress: 0.3,
                       isLeft: false,
                     ),
                   ],
@@ -67,21 +64,28 @@ class BossFightScreen extends StatelessWidget {
                         height: 160,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: const Color(0xFF0F002A), 
-                          border: Border.all(color: cardColor, width: 4),
+                          color: AppColors.boss.cardColor,
+                          border: Border.all(
+                            color: AppColors.boss.cardColor,
+                            width: 4,
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: bossMagenta.withValues(alpha: 0.1),
+                              color: AppColors.boss.bossMagenta.withValues(
+                                alpha: 0.1,
+                              ),
                               blurRadius: 40,
                               spreadRadius: 10,
-                            )
+                            ),
                           ],
                         ),
                         child: Center(
                           child: Icon(
-                            Icons.visibility_outlined, 
+                            Icons.visibility_outlined,
                             size: 80,
-                            color: bossMagenta.withValues(alpha: 0.6), 
+                            color: AppColors.boss.bossMagenta.withValues(
+                              alpha: 0.6,
+                            ),
                           ),
                         ),
                       ),
@@ -91,14 +95,16 @@ class BossFightScreen extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: bossMagenta,
+                            color: AppColors.boss.bossMagenta,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: bossMagenta.withValues(alpha: 0.6),
+                                color: AppColors.boss.bossMagenta.withValues(
+                                  alpha: 0.6,
+                                ),
                                 blurRadius: 15,
                                 spreadRadius: 2,
-                              )
+                              ),
                             ],
                           ),
                           child: const Text(
@@ -122,7 +128,7 @@ class BossFightScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(24.0),
                   decoration: BoxDecoration(
-                    color: cardColor,
+                    color: AppColors.boss.cardColor,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(color: Colors.white12, width: 1),
                   ),
@@ -143,19 +149,24 @@ class BossFightScreen extends StatelessWidget {
                             ),
                           ), // <-- FIXED: Closing parentheses added here!
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
                             decoration: BoxDecoration(
-                              color: Colors.amber.withValues(alpha: 0.2),
+                              color: AppColors.boss.attackTimer.withValues(
+                                alpha: 0.2,
+                              ),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Row(
+                            child: Row(
                               children: [
-                                Icon(Icons.bolt, color: Colors.amber, size: 16),
+                                Icon(Icons.bolt, color: AppColors.boss.attackTimer, size: 16),
                                 SizedBox(width: 4),
                                 Text(
                                   '13s',
                                   style: TextStyle(
-                                    color: Colors.amber,
+                                    color: AppColors.boss.attackTimer,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -165,7 +176,7 @@ class BossFightScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      
+
                       // Question Text
                       const Text(
                         'Question Here',
@@ -205,10 +216,14 @@ class BossFightScreen extends StatelessWidget {
   }) {
     return Expanded(
       child: Column(
-        crossAxisAlignment: isLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+        crossAxisAlignment: isLeft
+            ? CrossAxisAlignment.start
+            : CrossAxisAlignment.end,
         children: [
           Row(
-            mainAxisAlignment: isLeft ? MainAxisAlignment.start : MainAxisAlignment.end,
+            mainAxisAlignment: isLeft
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               if (isLeft) _buildIconContainer(icon, color),
               if (isLeft) const SizedBox(width: 12),
@@ -220,7 +235,9 @@ class BossFightScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: FractionallySizedBox(
-                    alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
+                    alignment: isLeft
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
                     widthFactor: progress,
                     child: Container(
                       decoration: BoxDecoration(
@@ -268,7 +285,7 @@ class BossFightScreen extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2A1C4F), 
+        color: AppColors.boss.cardColor.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white10, width: 1),
       ),
