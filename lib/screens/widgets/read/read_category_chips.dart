@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:read_quest/screens/view/read_screen.dart';
+import 'package:read_quest/screens/view/home_tabs/read_tab.dart';
 
 class ReadCategoryChips extends StatelessWidget {
   final ReadCategory value;

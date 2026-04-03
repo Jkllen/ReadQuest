@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:read_quest/screens/view/read_screen.dart';
-import 'package:read_quest/screens/view/rewards_screen.dart';
-import 'package:read_quest/screens/widgets/home/home_tab.dart';
-import 'package:read_quest/screens/view/stats_screen.dart';
+import 'package:read_quest/screens/view/home_tabs/read_tab.dart';
+import 'package:read_quest/screens/view/home_tabs/rewards_tab.dart';
+import 'package:read_quest/screens/view/home_tabs/dashboard_tab.dart';
+import 'package:read_quest/screens/view/home_tabs/stats_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,8 +16,8 @@ class HomeScreenState extends State<HomeScreen> {
 
   List<NavigationDestination> destinations = [
     NavigationDestination(
-      icon: Icon(Icons.home, color: Colors.white),
-      label: "Home",
+      icon: Icon(Icons.dashboard, color: Colors.white),
+      label: "Dashboard",
     ),
     NavigationDestination(
       icon: Icon(Icons.menu_book, color: Colors.white),
@@ -40,10 +40,10 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      HomeTab(onOpenReadTab: () => onTap(1)),
-      const ReadScreen(),
-      const RewardsScreen(),
-      const StatsScreen(),
+      DashboardTab(onOpenReadTab: () => onTap(1)),
+      const ReadTab(),
+      const RewardsTab(),
+      const StatsTab(),
     ];
 
     return Scaffold(

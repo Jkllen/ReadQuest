@@ -10,14 +10,14 @@ import 'package:read_quest/styles/app_spacings.dart';
 
 enum ReadCategory { all, stories, articles, passages }
 
-class ReadScreen extends StatefulWidget {
-  const ReadScreen({super.key});
+class ReadTab extends StatefulWidget {
+  const ReadTab({super.key});
 
   @override
-  State<ReadScreen> createState() => ReadScreenState();
+  State<ReadTab> createState() => ReadTabState();
 }
 
-class ReadScreenState extends State<ReadScreen> {
+class ReadTabState extends State<ReadTab> {
   ReadCategory selectedCategory = ReadCategory.all;
   String searchQuery = "";
 

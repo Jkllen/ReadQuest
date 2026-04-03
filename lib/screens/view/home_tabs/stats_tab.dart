@@ -8,15 +8,6 @@ import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/app_spacings.dart';
 import 'package:read_quest/styles/card_styles.dart';
 
-class StatsScreen extends StatelessWidget {
-  const StatsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const StatsTab();
-  }
-}
-
 class StatsTab extends StatelessWidget {
   const StatsTab({super.key});
 
@@ -67,9 +58,6 @@ class StatsTab extends StatelessWidget {
         final IconData growthIcon = isPositiveGrowth
             ? Icons.trending_up
             : Icons.trending_down;
-        final Color growthBgColor = isPositiveGrowth
-            ? const Color(0xFFE8F5E9)
-            : const Color(0xFFFEE2E2);
 
         // 3. Weekly Progress Chart Data
         final List<dynamic> rawWeeklyData =

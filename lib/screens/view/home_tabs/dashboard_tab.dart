@@ -8,10 +8,10 @@ import 'package:read_quest/screens/widgets/home/xp_progress_bar.dart';
 import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/app_spacings.dart';
 
-class HomeTab extends StatelessWidget {
+class DashboardTab extends StatelessWidget {
   final VoidCallback onOpenReadTab;
 
-  const HomeTab({super.key, required this.onOpenReadTab});
+  const DashboardTab({super.key, required this.onOpenReadTab});
 
   int asInt(dynamic value, {int fallback = 0}) {
     if (value is int) return value;
@@ -73,7 +73,7 @@ class HomeTab extends StatelessWidget {
         final int streakDays = asInt(data["streakDays"], fallback: 0);
         final int wordsLearned = asInt(data["wordsLearned"], fallback: 0);
 
-        return HomePage(
+        return DashboardPage(
           username: username,
           level: level,
           streak: streak,
@@ -90,8 +90,8 @@ class HomeTab extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({
     super.key,
     required this.username,
     required this.level,

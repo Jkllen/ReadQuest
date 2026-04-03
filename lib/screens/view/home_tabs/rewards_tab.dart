@@ -6,8 +6,8 @@ import 'package:read_quest/screens/widgets/rewards/rewards_progress_card.dart';
 import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/app_spacings.dart';
 
-class RewardsScreen extends StatelessWidget {
-  const RewardsScreen({super.key});
+class RewardsTab extends StatelessWidget {
+  const RewardsTab({super.key});
 
   @override
   Widget build(BuildContext context) {
