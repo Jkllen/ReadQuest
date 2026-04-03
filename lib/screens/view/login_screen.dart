@@ -8,7 +8,7 @@ import 'register_screen.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration inputDecoration(String hint) {
     return InputDecoration(
       filled: true,
       fillColor: Colors.white,
@@ -72,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       TextField(
                         keyboardType: TextInputType.emailAddress,
-                        decoration: _inputDecoration('Enter your email'),
+                        decoration: inputDecoration('Enter your email'),
                         onChanged: vm.setEmail,
                       ),
 
@@ -81,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                       // Password
                       const Text('Password', style: AppTextStyles.inputLabel),
                       const SizedBox(height: 8),
-                      _PasswordField(decoration: _inputDecoration('Enter your password')),
+                      PasswordField(decoration: inputDecoration('Enter your password')),
 
                       const SizedBox(height: 24),
 
@@ -174,27 +174,30 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _PasswordField extends StatefulWidget {
+class PasswordField extends StatefulWidget {
   final InputDecoration decoration;
-  const _PasswordField({required this.decoration});
+  const PasswordField({
+    super.key, 
+    required this.decoration
+  });
 
   @override
-  State<_PasswordField> createState() => _PasswordFieldState();
+  State<PasswordField> createState() => PasswordFieldState();
 }
 
-class _PasswordFieldState extends State<_PasswordField> {
-  bool _obscure = true;
+class PasswordFieldState extends State<PasswordField> {
+  bool obscure = true;
 
   @override
   Widget build(BuildContext context) {
     final vm = context.read<LoginViewModel>();
 
     return TextField(
-      obscureText: _obscure,
+      obscureText: obscure,
       decoration: widget.decoration.copyWith(
         suffixIcon: IconButton(
-          onPressed: () => setState(() => _obscure = !_obscure),
-          icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+          onPressed: () => setState(() => obscure = !obscure),
+          icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
         ),
       ),
       onChanged: vm.setPassword,

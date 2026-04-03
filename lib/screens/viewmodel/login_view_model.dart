@@ -3,54 +3,84 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:read_quest/services/auth_services.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  String _email = '';
-  String _password = '';
-  bool _isLoading = false;
+  String email = '';
+  String password = '';
+  bool loading = false;
 
-  String get email => _email;
-  String get password => _password;
-  bool get isLoading => _isLoading;
+  String get isEmail => email;
+  String get isPassword => password;
+  bool get isLoading => loading;
 
   void setEmail(String value) {
-    _email = value.trim();
+    email = value.trim();
     notifyListeners();
   }
 
   void setPassword(String value) {
-    _password = value;
+    password = value;
     notifyListeners();
   }
 
+  bool _isValidEmail(String value) {
+    final emailRegex = RegExp(
+      r'^[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(value);
+  }
+
   Future<String?> login() async {
-    if (_email.isEmpty || _password.isEmpty) {
-      return 'Please fill in all fields';
+    if (loading) return 'Login is already in progress.';
+
+    final trimmedEmail = email.trim();
+
+    if (trimmedEmail.isEmpty && password.isEmpty) {
+      return 'Please enter your email and password.';
     }
 
-    _isLoading = true;
+    if (trimmedEmail.isEmpty) {
+      return 'Please enter your email.';
+    }
+
+    if (password.isEmpty) {
+      return 'Please enter your password.';
+    }
+
+    if (!_isValidEmail(trimmedEmail)) {
+      return 'Please enter a valid email address.';
+    }
+
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters.';
+    }
+
+    loading = true;
     notifyListeners();
 
     try {
       final user = await AuthService().login(
-        email: _email,
-        password: _password,
+        email: trimmedEmail,
+        password: password,
       );
 
       if (user == null) {
         return 'Login failed. Please try again.';
       }
 
-      return null; 
+      return null;
     } on FirebaseAuthException catch (e) {
       return switch (e.code) {
         'user-not-found' => 'No account found for that email.',
-        'wrong-password' => 'Wrong password.',
+        'wrong-password' => 'Incorrect password.',
         'invalid-email' => 'Invalid email format.',
-        _ => 'Login failed: ${e.message}',
+        'invalid-credential' => 'Invalid email or password.',
+        'too-many-requests' => 'Too many attempts. Please try again later.',
+        'user-disabled' => 'This account has been disabled.',
+        _ => 'Login failed. Please try again.',
       };
-    } catch (e) {
-      return 'Login failed: $e';
+    } catch (_) {
+      return 'Something went wrong. Please try again.';
     } finally {
-      _isLoading = false;
+      loading = false;
       notifyListeners();
     }
   }

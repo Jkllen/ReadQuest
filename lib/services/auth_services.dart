@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<User?> register({
     required String email,
@@ -11,7 +11,7 @@ class AuthService {
     required String username,
   }) async {
 
-    final cred = await _auth.createUserWithEmailAndPassword(
+    final cred = await auth.createUserWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
@@ -20,11 +20,11 @@ class AuthService {
     if (user == null) return null;
 
     // Create user profile in Firestore
-    await _db.collection('users').doc(user.uid).set({
+    await db.collection('users').doc(user.uid).set({
       "email": email.trim(),
       "username": username.trim(),
 
-      // GAME DATA
+      // Game Data
       "level": 0,
       "streak": 0,
       "currentXp": 0,
@@ -34,10 +34,10 @@ class AuthService {
       "streakDays": 0,
       "wordsLearned": 0,
 
-      // QUEST
+      // Quest
       "currentStageTitle": "Stage 1",
 
-      // METADATA
+      // Metadata
       "createdAt": FieldValue.serverTimestamp(),
       "updatedAt": FieldValue.serverTimestamp(),
 
@@ -50,7 +50,7 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    final cred = await _auth.signInWithEmailAndPassword(
+    final cred = await auth.signInWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
@@ -58,7 +58,6 @@ class AuthService {
     return cred.user;
   }
 
-  Future<void> logout() => _auth.signOut();
-
-  User? get currentUser => _auth.currentUser;
+  Future<void> logout() => auth.signOut();
+  User? get currentUser => auth.currentUser;
 }
