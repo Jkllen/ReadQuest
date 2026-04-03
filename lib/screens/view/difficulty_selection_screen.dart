@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:read_quest/screens/view/quiz_screen.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class DifficultySelectionScreen extends StatelessWidget {
   final String title;
@@ -132,19 +133,19 @@ class DifficultySelectionScreen extends StatelessWidget {
                         children: [
                           DifficultyButton(
                             label: 'EASY',
-                            color: const Color(0xFF58ED78),
+                            color: AppColors.difficulty.easy,
                             onTap: () => openQuiz(context, 'easy'),
                           ),
                           const SizedBox(height: 28),
                           DifficultyButton(
                             label: 'NORMAL',
-                            color: const Color(0xFFF7B75E),
+                            color: AppColors.difficulty.medium,
                             onTap: () => openQuiz(context, 'normal'),
                           ),
                           const SizedBox(height: 28),
                           DifficultyButton(
                             label: 'HARD',
-                            color: const Color(0xFFE15050),
+                            color: AppColors.difficulty.hard,
                             onTap: () => openQuiz(context, 'hard'),
                           ),
                         ],

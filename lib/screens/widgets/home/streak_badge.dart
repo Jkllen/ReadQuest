@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class StreakBadge extends StatelessWidget {
   final int streak;
@@ -14,8 +15,8 @@ class StreakBadge extends StatelessWidget {
       height: 39,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7ED),
-        border: Border.all(color: const Color(0xFFDC7C52), width: 1),
+        color: AppColors.home.streakCard.withValues(alpha: 0.2),
+        border: Border.all(color: AppColors.home.streakCard, width: 1),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -23,21 +24,23 @@ class StreakBadge extends StatelessWidget {
         children: [
           Text(
             '$streak',
-            style: const TextStyle(
-              color: Color(0xFFFF6900),
+            style: TextStyle(
+              color: AppColors.home.streakCard,
               fontSize: 16,
               fontFamily: 'Mojangles',
               fontWeight: FontWeight.w400,
+              height: 1
             ),
           ),
           const SizedBox(width: 6),
-          const Text(
+          Text(
             'Streak',
             style: TextStyle(
-              color: Color(0xFFFF6900),
+              color: AppColors.home.streakCard,
               fontSize: 16,
               fontFamily: 'Mojangles',
               fontWeight: FontWeight.w400,
+              height: 1
             ),
           ),
         ],

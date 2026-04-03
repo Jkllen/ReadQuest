@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class ReadQuestCard extends StatelessWidget {
   final String title;
@@ -27,13 +28,13 @@ class ReadQuestCard extends StatelessWidget {
   Color difficultyColor(String difficulty) {
     switch (difficulty.toLowerCase()) {
       case 'easy':
-        return const Color(0xFF05DF72);
+        return AppColors.difficulty.easy;
       case 'medium':
-        return const Color(0xFFFDC700);
+        return AppColors.difficulty.medium;
       case 'hard':
-        return const Color(0xFFDF0505);
+        return AppColors.difficulty.hard;
       default:
-        return const Color(0xFF05DF72);
+        return AppColors.difficulty.easy;
     }
   }
 
@@ -162,7 +163,7 @@ class ReadQuestCard extends StatelessWidget {
                                     Text(
                                       '+$rewardXp XP REWARD',
                                       style: const TextStyle(
-                                        color: Color(0xFF155DFC),
+                                        color: AppColors.accent,
                                         fontWeight: FontWeight.w700,
                                         fontFamily: 'IBM Plex Sans',
                                       ),
@@ -195,7 +196,7 @@ class ReadQuestCard extends StatelessWidget {
                                         value: progress,
                                         minHeight: 8,
                                         backgroundColor: const Color(0xFFD9D9D9),
-                                        color: const Color(0xFF155DFC),
+                                        color: AppColors.accent,
                                       ),
                                     ),
                                   ],
@@ -208,7 +209,7 @@ class ReadQuestCard extends StatelessWidget {
                                   width: 70,
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF155DFC),
+                                    color: AppColors.accent,
                                     borderRadius: BorderRadius.circular(11),
                                   ),
                                   child: const Icon(

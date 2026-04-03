@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:read_quest/screens/view/read_screen.dart';
+import 'package:read_quest/screens/view/home_tabs/read_tab.dart';
+import 'package:read_quest/styles/app_colors.dart';
 
 class ReadCategoryChips extends StatelessWidget {
   final ReadCategory value;
@@ -24,7 +25,7 @@ class ReadCategoryChips extends StatelessWidget {
         height: 34,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF155DFC) : const Color(0xFFF3F4F6),
+          color: selected ? AppColors.accent : const Color(0xFFF3F4F6),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
