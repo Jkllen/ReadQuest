@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.67"
+  animate_gradient:
+    dependency: "direct main"
+    description:
+      name: animate_gradient
+      sha256: a8c4038f70c7a3b816b48add69067b772732941afbbf6ac96f54e98b336b2978
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   async:
     dependency: transitive
     description:
@@ -153,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  floating_animation:
+    dependency: "direct main"
+    description:
+      name: floating_animation
+      sha256: "090747c3aba98133b61a7cbb804fb6e2c157331a8df9a3898396921ca2dcca25"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
