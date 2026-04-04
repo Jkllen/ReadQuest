@@ -281,25 +281,45 @@ class QuestInfo extends StatelessWidget {
             ),
           const SizedBox(height: 10),
           Row(
-            spacing: 8,
             children: [
-              Text(
-                type.toUpperCase(),
-                style: const TextStyle(
-                  color: Color(0xFF6B7280),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'IBM Plex Sans',
+              Container(
+                height: 24,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    bottomLeft: Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      type.toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'IBM Plex Sans',
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(
+                height: 24,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
-                  vertical: 4,
                 ),
                 decoration: BoxDecoration(
                   color: diffColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -327,10 +347,7 @@ class QuestInfo extends StatelessWidget {
 }
 
 class DifficultyStars extends StatelessWidget {
-  const DifficultyStars({
-    super.key,
-    required this.difficulty,
-  });
+  const DifficultyStars({super.key, required this.difficulty});
 
   final String difficulty;
 
@@ -353,14 +370,12 @@ class DifficultyStars extends StatelessWidget {
     }
 
     return Row(
-      children: 
-      List.generate(
-        starCount,
-        (index) => _StarIcon(Icons.star_rounded),
-      ) + List.generate(
-        3 - starCount,
-        (index) => _StarIcon(Icons.star_border_rounded),
-      ),
+      children:
+          List.generate(starCount, (index) => _StarIcon(Icons.star_rounded)) +
+          List.generate(
+            3 - starCount,
+            (index) => _StarIcon(Icons.star_border_rounded),
+          ),
     );
   }
 
