@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/card_styles.dart';
 
 class DailyChallengeCard extends StatelessWidget {
@@ -25,12 +26,13 @@ class DailyChallengeCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            height: 52,
+            width: 52,
             decoration: BoxDecoration(
-              color: Colors.white24,
-              shape: BoxShape.circle,
+              color: AppColors.card.iconBackground,
+              borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(icon, color: Colors.white, size: 28),
+            child: Icon(icon, color: AppColors.card.icon, size: 28),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -39,8 +41,8 @@ class DailyChallengeCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: AppColors.card.text,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -48,8 +50,8 @@ class DailyChallengeCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   reward,
-                  style: const TextStyle(
-                    color: Colors.white70,
+                  style: TextStyle(
+                    color: AppColors.card.subtext,
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),
@@ -59,10 +61,10 @@ class DailyChallengeCard extends StatelessWidget {
           ),
           Text(
             progress,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
-              color: Colors.white70,
+              color: AppColors.card.text,
             ),
           ),
         ],

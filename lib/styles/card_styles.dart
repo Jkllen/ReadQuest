@@ -6,17 +6,17 @@ class CardStyles {
       return BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade300, width: 1),
+        border: Border.all(color: Colors.grey.shade300, width: 2),
       );
     }
 
     return BoxDecoration(
-      color: clampHSL(color, lightness: 0.5),
+      color: modifyHSL(color, lightness: 0.1, saturation: 0.1),
       borderRadius: BorderRadius.circular(20),
-      // border: Border.all(
-      //   color: clampHSL(color, lightness: 0.6, saturation: 0.5),
-      //   width: 1,
-      // ),
+      border: Border.all(
+        color: modifyHSL(color, saturation: 0.1),
+        width: 2,
+      ),
     );
   }
 
@@ -30,21 +30,28 @@ class CardStyles {
     }
 
     return BoxDecoration(
-      color: clampHSL(color, lightness: 0.92, saturation: 0.40),
+      color: setHSL(color, lightness: 0.92, saturation: 0.40),
       borderRadius: BorderRadius.circular(20),
       border: Border.all(
-        color: clampHSL(color, lightness: 0.6, saturation: 0.5),
+        color: setHSL(color, lightness: 0.6, saturation: 0.5),
         width: 1,
       ),
     );
   }
 
-  static Color clampHSL(
+  static Color setHSL(
     Color color, {
+    double hue = -1,
     double lightness = -1,
     double saturation = -1,
   }) {
     HSLColor hsl = HSLColor.fromColor(color);
+
+    if (hue != -1) {
+      hue = hue.clamp(0.0, 360.0);
+    } else {
+      hue = hsl.hue;
+    }
 
     if (lightness != -1) {
       lightness = lightness.clamp(0.0, 1.0);
@@ -57,6 +64,21 @@ class CardStyles {
     } else {
       saturation = hsl.saturation;
     }
+
+    return hsl.withLightness(lightness).withSaturation(saturation).toColor();
+  }
+
+  static Color modifyHSL(
+    Color color, {
+    double hue = 0,
+    double lightness = 0,
+    double saturation = 0,
+  }) {
+    HSLColor hsl = HSLColor.fromColor(color);
+
+    hue = (hsl.hue + hue) % 360;
+    lightness = (hsl.lightness + lightness).clamp(0.0, 1.0);
+    saturation = (hsl.saturation + saturation).clamp(0.0, 1.0);
 
     return hsl.withLightness(lightness).withSaturation(saturation).toColor();
   }

@@ -4,6 +4,8 @@ class AppColors {
   static const homeBackground = Color(0xFFF9FAFB);
   static const accent = Color(0xFF2078FC);
 
+  static const card = _CardColors();
+
   static const home = _HomeColors();
   static const read = _ReadColors();
   static const difficulty = _DifficultyColors();
@@ -11,6 +13,17 @@ class AppColors {
   static const stats = _StatsColors();
   static const quiz = _QuizColors();
   static const boss = _BossColors();
+}
+
+class _CardColors {
+  const _CardColors();
+
+  final text = Colors.white;
+  final subtext = Colors.white70;
+  final subtext2 = Colors.white54;
+
+  final icon = Colors.white;
+  final iconBackground = Colors.white24;
 }
 
 class _HomeColors {

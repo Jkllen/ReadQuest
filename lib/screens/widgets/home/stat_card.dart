@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/card_styles.dart';
 
 class StatCard extends StatelessWidget {
@@ -29,7 +30,7 @@ class StatCard extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.card.text,
                 fontSize: 32,
                 fontFamily: 'IBM Plex Sans',
                 fontWeight: FontWeight.w600,
@@ -40,7 +41,7 @@ class StatCard extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.card.subtext,
                 fontSize: 14,
                 fontFamily: 'IBM Plex Sans',
                 fontWeight: FontWeight.w400,

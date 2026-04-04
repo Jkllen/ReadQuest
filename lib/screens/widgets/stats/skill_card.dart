@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/card_styles.dart';
 
 class SkillCard extends StatelessWidget {
@@ -28,10 +29,10 @@ class SkillCard extends StatelessWidget {
             height: 52,
             width: 52,
             decoration: BoxDecoration(
-              color: Colors.white24,
+              color: AppColors.card.iconBackground,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(iconData, color: Colors.white, size: 26),
+            child: Icon(iconData, color: AppColors.card.icon, size: 28),
           ),
           const SizedBox(width: 18),
           Expanded(
@@ -43,10 +44,10 @@ class SkillCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: AppColors.card.text,
                       ),
                     ),
                     Text(
@@ -54,7 +55,7 @@ class SkillCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white70,
+                        color: AppColors.card.subtext,
                       ),
                     ),
                   ],
@@ -64,7 +65,7 @@ class SkillCard extends StatelessWidget {
                   height: 8,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white30,
+                    color: AppColors.card.subtext2,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: FractionallySizedBox(
@@ -72,7 +73,7 @@ class SkillCard extends StatelessWidget {
                     widthFactor: safePercentage,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white54,
+                        color: AppColors.card.subtext,
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
