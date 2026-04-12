@@ -11,10 +11,10 @@ class CardStyles {
     }
 
     return BoxDecoration(
-      color: modifyHSL(color, lightness: 0.1, saturation: 0.1),
+      color: modifyHSL(color, lightness: 0, saturation: 0),
       borderRadius: BorderRadius.circular(20),
       border: Border.all(
-        color: modifyHSL(color, saturation: 0.1),
+        color: modifyHSL(color, lightness: -0.1, saturation: 0.1 ),
         width: 2,
       ),
     );

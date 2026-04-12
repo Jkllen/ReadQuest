@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
+class AppPalette {
+  const AppPalette();
+
+  static const white = Color(0xffeeeff5);
+  static const brown = Color(0xFf454135);
+  static const black = Color(0xFF1e1e1f);
+
+  static const aqua = Color(0xFF46B5C8);
+  static const blue =  Color(0xFF8591c1);
+  static const green = Color(0xffb5ca8d);
+  static const red = Color(0xFFff858d);
+  static const yellow = Color(0xFFffc857);
+}
+
+class AppColors extends AppPalette {
   static const homeBackground = Color(0xFFF9FAFB);
+  static const navigationBar = AppPalette.black;
   static const accent = Color(0xFF2078FC);
 
   static const card = _CardColors();
@@ -15,7 +30,7 @@ class AppColors {
   static const boss = _BossColors();
 }
 
-class _CardColors {
+class _CardColors extends AppPalette {
   const _CardColors();
 
   final text = Colors.white;
@@ -26,24 +41,24 @@ class _CardColors {
   final iconBackground = Colors.white24;
 }
 
-class _HomeColors {
+class _HomeColors extends AppPalette {
   const _HomeColors();
 
-  final xpCard = const Color(0xFF7C3AED);
-  final badgeCard = const Color(0xFF34D399);
-  final levelCard = const Color(0xFF432DD7);
-  final streakCard = const Color(0xFFF97316);
-  final wordsCard = const Color(0xFF432DD7);
+  final xpCard = AppPalette.blue;
+  final badgeCard = AppPalette.green;
+  final levelCard = AppPalette.red;
+  final streakCard = AppPalette.yellow;
+  final wordsCard = AppPalette.aqua;
 }
 
-class _ReadColors {
+class _ReadColors extends AppPalette {
   const _ReadColors();
   final easy = const Color(0xFF05DF72);
   final medium = const Color(0xFFFDC700);
   final hard = const Color(0xFFDF0505);
 }
 
-class _DifficultyColors {
+class _DifficultyColors extends AppPalette {
   const _DifficultyColors();
 
   final easy = const Color(0xFF05DF72);
@@ -51,13 +66,13 @@ class _DifficultyColors {
   final hard = const Color(0xFFDF0505);
 }
 
-class _RewardsColors {
+class _RewardsColors extends AppPalette {
   const _RewardsColors();
 
   // TODO: Move rewards colors here
 }
 
-class _StatsColors {
+class _StatsColors extends AppPalette {
   const _StatsColors();
 
   final positiveGrowth = const Color(0xFF22C55E);
@@ -68,14 +83,14 @@ class _StatsColors {
   final speedCard = const Color(0xFF10B981);
 }
 
-class _QuizColors {
+class _QuizColors extends AppPalette {
   const _QuizColors();
 
   final correct = const Color(0xFF22C55E);
   final incorrect = const Color(0xFFEF4444);
 }
 
-class _BossColors {
+class _BossColors extends AppPalette {
   const _BossColors();
 
   final bgStartColor = const Color(0xFF160A34);
