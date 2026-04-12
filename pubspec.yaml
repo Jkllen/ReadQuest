@@ -8,6 +8,8 @@ environment:
   sdk: ^3.11.0
 
 dependencies:
+  floating_animation: ^1.0.9
+  animate_gradient: ^0.0.4
   flutter:
     sdk: flutter
 
@@ -47,3 +49,11 @@ flutter:
     - family: Maname
       fonts:
         - asset: assets/fonts/Maname-Regular.ttf
+
+flutter_native_splash:
+  color: "#ECFCFF"
+  image: assets/images/read_quest_logo_splash.png
+  android: true
+  ios: true
+  android_gravity: center
+  ios_content_mode: center

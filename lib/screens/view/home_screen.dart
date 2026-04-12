@@ -4,6 +4,7 @@ import 'package:read_quest/screens/view/home_tabs/rewards_tab.dart';
 import 'package:read_quest/screens/view/home_tabs/dashboard_tab.dart';
 import 'package:read_quest/screens/view/home_tabs/stats_tab.dart';
 import 'package:read_quest/styles/app_colors.dart';
+import 'package:animate_gradient/animate_gradient.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -48,7 +49,28 @@ class HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      body: pages[currentIndex],
+      body: Stack(
+        children: [
+          AnimateGradient(
+            primaryBegin: Alignment.topLeft,
+            primaryEnd: Alignment.bottomLeft,
+            secondaryBegin: Alignment.bottomLeft,
+            secondaryEnd: Alignment.topRight,
+            primaryColors: const [
+              Color.fromARGB(255, 200, 112, 255),
+              Color.fromARGB(255, 219, 169, 250),
+              Colors.white,
+            ],
+            secondaryColors: const [
+              Colors.white,
+              Color.fromARGB(255, 170, 201, 255),
+              Color.fromARGB(255, 108, 208, 255),
+            ],
+            duration: const Duration(seconds: 30),
+          ),
+          pages[currentIndex],
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: onTap,

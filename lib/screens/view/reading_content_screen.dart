@@ -215,7 +215,7 @@ class ReadingContentScreenState extends State<ReadingContentScreen> {
                     ],
                     const SizedBox(height: 24),
                     Text(
-                      widget.content,
+                      widget.content.replaceAll('\\n', '\n'),
                       textAlign: TextAlign.justify,
                       style: AppTextStyles.readingBody,
                     ),
