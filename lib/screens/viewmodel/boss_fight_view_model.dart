@@ -218,8 +218,6 @@ class BossFightViewModel extends ChangeNotifier {
           totalQuestions: questions.length
         );
 
-        await userService.updateWeeklyGrowth();
-
         // Bonus multiplier for beating a boss
         await userService.addQuizRewards(
           xpAmount: (score * 5) + 50, // Added a 50 XP flat boss bonus

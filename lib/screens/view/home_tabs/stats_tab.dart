@@ -58,7 +58,6 @@ class StatsTab extends StatelessWidget {
 
         // 1. Skill Mastery
         final int vocabulary = (data['vocabulary'] ?? 0).toInt();
-        final int wordsLearned = (data['wordsLearned'] ?? 0).toInt();
 
         // Defaulting these to 0 since they aren't in this specific DB snapshot
         final int comprehension = (data['comprehension'] ?? 0).toInt();
@@ -74,8 +73,8 @@ class StatsTab extends StatelessWidget {
             : "$weeklyGrowth% from yesterday";
 
         final Color growthColor = isPositiveGrowth
-            ? const Color.fromARGB(211, 120, 230, 123)
-            : const Color.fromARGB(192, 214, 97, 89);
+            ? AppColors.stats.positiveGrowth
+            : AppColors.stats.negativeGrowth;
 
         final IconData growthIcon = isPositiveGrowth
             ? Icons.trending_up
@@ -209,7 +208,7 @@ class StatsTab extends StatelessWidget {
                                             // value.toInt() == 6 ? 'Today' : dynamicDays[value.toInt()],
                                             dynamicDays[value.toInt()],
                                             style: TextStyle(
-                                              color: Colors.grey.shade500,
+                                              color: Colors.black87,
                                               fontSize: 11,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -290,14 +289,6 @@ class StatsTab extends StatelessWidget {
                     accentColor: AppColors.stats.speedCard,
                     iconData: Icons.wifi_tethering_rounded,
                   ),
-                  const SizedBox(height: 14),
-                  SkillCard(
-                    title: "Words Learned",
-                    percentage: wordsLearned, // Currently 6
-                    accentColor: Colors.blueAccent,
-                    iconData: Icons.translate_rounded,
-                  ),
-                  const SizedBox(height: 14),
                 ],
               ),
             ),
