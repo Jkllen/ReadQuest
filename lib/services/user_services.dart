@@ -57,6 +57,63 @@ class UserService {
     }, SetOptions(merge: true));
   }
 
+  Future<String> _todayRewardDocId() async {
+    final now = DateTime.now();
+    final yyyy = now.year.toString().padLeft(4, '0');
+    final mm = now.month.toString().padLeft(2, '0');
+    final dd = now.day.toString().padLeft(2, '0');
+    return '$yyyy-$mm-$dd';
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> dailyRewardsStream() async* {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) {
+      yield* const Stream.empty();
+      return;
+    }
+
+    final docId = await _todayRewardDocId();
+
+    yield* _db
+        .collection('users')
+        .doc(uid)
+        .collection('daily_rewards')
+        .doc(docId)
+        .snapshots();
+  }
+
+  Future<bool> claimDailyReward({
+    required String challengeKey,
+    required int xpReward,
+  }) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return false;
+
+    final docId = await _todayRewardDocId();
+
+    final rewardRef = _db
+        .collection('users')
+        .doc(uid)
+        .collection('daily_rewards')
+        .doc(docId);
+
+    final snapshot = await rewardRef.get();
+    final data = snapshot.data() ?? {};
+
+    if (data[challengeKey] == true) {
+      return false;
+    }
+
+    await rewardRef.set({
+      challengeKey: true,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    await addQuizRewards(xpAmount: xpReward);
+
+    return true;
+  }
+
   Future<void> incrementSkillStat({
     required String skill,
     int amount = 1,

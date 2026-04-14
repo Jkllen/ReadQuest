@@ -7,6 +7,7 @@ import 'package:read_quest/screens/widgets/rewards/rewards_badge.dart';
 import 'package:read_quest/screens/widgets/rewards/rewards_progress_card.dart';
 import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/styles/app_spacings.dart';
+import 'package:read_quest/services/user_services.dart';
 
 class RewardsTab extends StatelessWidget {
   const RewardsTab({super.key});
@@ -22,11 +23,15 @@ class RewardsTab extends StatelessWidget {
         date.day == now.day;
   }
 
-  int _countCompletedReadings(List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
+  int _countCompletedReadings(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
     return docs.where((doc) => doc.data()['isCompleted'] == true).length;
   }
 
-  int _countTodayCompletedReadings(List<QueryDocumentSnapshot<Map<String, dynamic>>> docs) {
+  int _countTodayCompletedReadings(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
     return docs.where((doc) {
       final data = doc.data();
       final isCompleted = data['isCompleted'] == true;
@@ -49,6 +54,7 @@ class RewardsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uid = FirebaseAuth.instance.currentUser?.uid;
+    final userService = UserService();
 
     if (uid == null) {
       return const Scaffold(
@@ -68,6 +74,8 @@ class RewardsTab extends StatelessWidget {
         .doc(uid)
         .collection('progress')
         .snapshots();
+
+    final dailyRewardsStream = userService.dailyRewardsStream();
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: userDocStream,
@@ -92,11 +100,14 @@ class RewardsTab extends StatelessWidget {
 
         final int level = (userData['level'] as num?)?.toInt() ?? 0;
         final int currentXp = (userData['currentXp'] as num?)?.toInt() ?? 0;
-        final int targetXp = (userData['targetXp'] as num?)?.toInt() ?? 2000;
-        final int totalXpEarned = (userData['totalXpEarned'] as num?)?.toInt() ?? 0;
-        final int comprehension = (userData['comprehension'] as num?)?.toInt() ?? 0;
+        final int targetXp = (userData['targetXp'] as num?)?.toInt() ?? 100;
+        final int totalXpEarned =
+            (userData['totalXpEarned'] as num?)?.toInt() ?? 0;
+        final int comprehension =
+            (userData['comprehension'] as num?)?.toInt() ?? 0;
         final int vocabulary = (userData['vocabulary'] as num?)?.toInt() ?? 0;
-        final int readingSpeed = (userData['readingSpeed'] as num?)?.toInt() ?? 0;
+        final int readingSpeed =
+            (userData['readingSpeed'] as num?)?.toInt() ?? 0;
         final int streakDays = (userData['streakDays'] as num?)?.toInt() ?? 0;
 
         return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -119,9 +130,10 @@ class RewardsTab extends StatelessWidget {
             }
 
             final progressDocs = progressSnapshot.data?.docs ?? [];
-
-            final int completedReadings = _countCompletedReadings(progressDocs);
-            final int todayCompleted = _countTodayCompletedReadings(progressDocs);
+            final int completedReadings =
+                _countCompletedReadings(progressDocs);
+            final int todayCompleted =
+                _countTodayCompletedReadings(progressDocs);
 
             final badges = [
               {
@@ -162,89 +174,186 @@ class RewardsTab extends StatelessWidget {
               },
             ];
 
-            return Scaffold(
-              backgroundColor: AppColors.homeBackground,
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  padding: AppSpacings.homeTabPadding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const MenuHeader(
-                        headerText: 'Reading Rewards',
-                        subHeaderText: 'Collect badges and unlock new quests',
-                      ),
-                      const SizedBox(height: 24),
+            return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: dailyRewardsStream,
+              builder: (context, dailySnapshot) {
+                final rewardData = dailySnapshot.data?.data() ?? {};
 
-                      RewardsProgressCard(
-                        level: level,
-                        currentXp: currentXp,
-                        targetXp: targetXp,
-                        totalXpEarned: totalXpEarned,
-                      ),
+                final bool complete2Done = todayCompleted >= 2;
+                final bool complete5Done = todayCompleted >= 5;
+                final bool complete10Done = todayCompleted >= 10;
+                final bool complete20Done = todayCompleted >= 20;
 
-                      const SizedBox(height: 32),
-                      _buildSectionTitle('My Badges'),
-                      const SizedBox(height: 16),
+                final bool complete2Claimed = rewardData['complete2'] == true;
+                final bool complete5Claimed = rewardData['complete5'] == true;
+                final bool complete10Claimed = rewardData['complete10'] == true;
+                final bool complete20Claimed = rewardData['complete20'] == true;
 
-                      Wrap(
-                        spacing: 16,
-                        runSpacing: 20,
-                        alignment: WrapAlignment.start,
-                        children: badges.map((badge) {
-                          return RewardsBadge(
-                            context: context,
-                            title: badge['title'] as String,
-                            color: badge['color'] as Color,
-                            icon: badge['icon'] as IconData,
-                            isLocked: badge['isLocked'] as bool,
-                          );
-                        }).toList(),
-                      ),
-
-                      const SizedBox(height: 32),
-                      _buildSectionTitle('Daily Challenges'),
-                      const SizedBox(height: 16),
-
-                      Column(
+                return Scaffold(
+                  backgroundColor: AppColors.homeBackground,
+                  body: SafeArea(
+                    child: SingleChildScrollView(
+                      padding: AppSpacings.homeTabPadding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          DailyChallengeCard(
-                            title: 'Complete 2 Quests',
-                            reward: '+100 XP REWARD',
-                            progress: '${todayCompleted.clamp(0, 2)}/2',
-                            icon: Icons.bolt,
-                            iconColor: Colors.blue,
+                          const MenuHeader(
+                            headerText: 'Reading Rewards',
+                            subHeaderText:
+                                'Collect badges and unlock new quests',
                           ),
-                          const SizedBox(height: 12),
-                          DailyChallengeCard(
-                            title: 'Complete 5 Quests',
-                            reward: '+250 XP REWARD',
-                            progress: '${todayCompleted.clamp(0, 5)}/5',
-                            icon: Icons.bolt,
-                            iconColor: Colors.blue,
+                          const SizedBox(height: 24),
+                          RewardsProgressCard(
+                            level: level,
+                            currentXp: currentXp,
+                            targetXp: targetXp,
+                            totalXpEarned: totalXpEarned,
                           ),
-                          const SizedBox(height: 12),
-                          DailyChallengeCard(
-                            title: 'Complete 10 Quests',
-                            reward: '+500 XP REWARD',
-                            progress: '${todayCompleted.clamp(0, 10)}/10',
-                            icon: Icons.bolt,
-                            iconColor: Colors.blue,
+                          const SizedBox(height: 32),
+                          _buildSectionTitle('My Badges'),
+                          const SizedBox(height: 16),
+                          Wrap(
+                            spacing: 16,
+                            runSpacing: 20,
+                            alignment: WrapAlignment.start,
+                            children: badges.map((badge) {
+                              return RewardsBadge(
+                                context: context,
+                                title: badge['title'] as String,
+                                color: badge['color'] as Color,
+                                icon: badge['icon'] as IconData,
+                                isLocked: badge['isLocked'] as bool,
+                              );
+                            }).toList(),
                           ),
-                          const SizedBox(height: 12),
-                          DailyChallengeCard(
-                            title: 'Complete 20 Quests',
-                            reward: '+1000 XP REWARD',
-                            progress: '${todayCompleted.clamp(0, 20)}/20',
-                            icon: Icons.bolt,
-                            iconColor: Colors.blue,
+                          const SizedBox(height: 32),
+                          _buildSectionTitle('Daily Challenges'),
+                          const SizedBox(height: 16),
+                          Column(
+                            children: [
+                              DailyChallengeCard(
+                                title: 'Complete 2 Quests',
+                                reward: '+100 XP REWARD',
+                                progress: '${todayCompleted.clamp(0, 2)}/2',
+                                icon: Icons.bolt,
+                                iconColor: Colors.blue,
+                                isCompleted: complete2Done,
+                                isClaimed: complete2Claimed,
+                                onClaim: () async {
+                                  final success =
+                                      await userService.claimDailyReward(
+                                    challengeKey: 'complete2',
+                                    xpReward: 100,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        success
+                                            ? 'Reward claimed: +100 XP'
+                                            : 'Reward already claimed.',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 12),
+                              DailyChallengeCard(
+                                title: 'Complete 5 Quests',
+                                reward: '+250 XP REWARD',
+                                progress: '${todayCompleted.clamp(0, 5)}/5',
+                                icon: Icons.bolt,
+                                iconColor: Colors.blue,
+                                isCompleted: complete5Done,
+                                isClaimed: complete5Claimed,
+                                onClaim: () async {
+                                  final success =
+                                      await userService.claimDailyReward(
+                                    challengeKey: 'complete5',
+                                    xpReward: 250,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        success
+                                            ? 'Reward claimed: +250 XP'
+                                            : 'Reward already claimed.',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 12),
+                              DailyChallengeCard(
+                                title: 'Complete 10 Quests',
+                                reward: '+500 XP REWARD',
+                                progress: '${todayCompleted.clamp(0, 10)}/10',
+                                icon: Icons.bolt,
+                                iconColor: Colors.blue,
+                                isCompleted: complete10Done,
+                                isClaimed: complete10Claimed,
+                                onClaim: () async {
+                                  final success =
+                                      await userService.claimDailyReward(
+                                    challengeKey: 'complete10',
+                                    xpReward: 500,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        success
+                                            ? 'Reward claimed: +500 XP'
+                                            : 'Reward already claimed.',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 12),
+                              DailyChallengeCard(
+                                title: 'Complete 20 Quests',
+                                reward: '+1000 XP REWARD',
+                                progress: '${todayCompleted.clamp(0, 20)}/20',
+                                icon: Icons.bolt,
+                                iconColor: Colors.blue,
+                                isCompleted: complete20Done,
+                                isClaimed: complete20Claimed,
+                                onClaim: () async {
+                                  final success =
+                                      await userService.claimDailyReward(
+                                    challengeKey: 'complete20',
+                                    xpReward: 1000,
+                                  );
+
+                                  if (!context.mounted) return;
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        success
+                                            ? 'Reward claimed: +1000 XP'
+                                            : 'Reward already claimed.',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         );
