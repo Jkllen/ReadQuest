@@ -15,7 +15,6 @@ migrate_working_dir/
 #FirbaseAdmin
 node_modules
 read-quest-51cbb-firebase-adminsdk-fbsvc-bf1b61339f.json
-seed_quiz.js
 
 # IntelliJ related
 *.iml
