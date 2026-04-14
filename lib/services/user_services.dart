@@ -150,7 +150,7 @@ class UserService {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
 
-    final double percent = totalQuestions == 0
+     final double percent = totalQuestions == 0
         ? 0
         : (score / totalQuestions) * 100;
     final int progressToAdd = percent.round();
@@ -175,10 +175,57 @@ class UserService {
       if (weeklyProgress.length > 7) {
         weeklyProgress = weeklyProgress.sublist(weeklyProgress.length - 7);
       }
-    await userRef.set({
-      "weeklyProgress": updatedProgress,
-      "updatedAt": FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+
+      int dailyCorrect = (data['dailyCorrect'] ?? 0).toInt();
+      int dailyTotal = (data['dailyTotal'] ?? 0).toInt();
+
+      Timestamp? lastUpdatedTs = data['updatedAt'] as Timestamp?;
+      DateTime now = DateTime.now();
+      DateTime todayMidnight = DateTime(now.year, now.month, now.day);
+
+      int daysPassed = 0;
+      if (lastUpdatedTs != null) {
+        DateTime lastUpdate = lastUpdatedTs.toDate();
+        DateTime lastUpdateMidnight = DateTime(
+          lastUpdate.year,
+          lastUpdate.month,
+          lastUpdate.day,
+        );
+        daysPassed = todayMidnight.difference(lastUpdateMidnight).inDays;
+      }
+
+      if (daysPassed > 0) {
+        dailyCorrect = 0;
+        dailyTotal = 0;
+        if (daysPassed >= 7) {
+          weeklyProgress = [0, 0, 0, 0, 0, 0, 0];
+        } else {
+          weeklyProgress.removeRange(0, daysPassed);
+          for (int i = 0; i < daysPassed; i++) {
+            weeklyProgress.add(0);
+          }
+        }
+      }
+
+      dailyCorrect += score;
+      dailyTotal += totalQuestions;
+      double dailyPercent = dailyTotal == 0
+          ? 0
+          : (dailyCorrect / dailyTotal) * 100;
+      weeklyProgress[6] = dailyPercent.round();
+
+      int yesterdayScore = weeklyProgress[5];
+      int todayScore = weeklyProgress[6];
+      int growth = todayScore - yesterdayScore;
+
+      transaction.update(docRef, {
+        'weeklyProgress': weeklyProgress,
+        'weeklyGrowth': growth,
+        'dailyCorrect': dailyCorrect,
+        'dailyTotal': dailyTotal,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    });
   }
 
   Future<void> updateBadgesWon({
@@ -259,56 +306,15 @@ class UserService {
       return;
     }
 
-      int dailyCorrect = (data['dailyCorrect'] ?? 0).toInt();
-      int dailyTotal = (data['dailyTotal'] ?? 0).toInt();
+    final num previous = weeklyProgress[weeklyProgress.length - 2] ?? 0;
+    final num latest = weeklyProgress[weeklyProgress.length - 1] ?? 0;
 
-      Timestamp? lastUpdatedTs = data['updatedAt'] as Timestamp?;
-      DateTime now = DateTime.now();
-      DateTime todayMidnight = DateTime(now.year, now.month, now.day);
+    final int growth = (latest - previous).round();
 
-      int daysPassed = 0;
-      if (lastUpdatedTs != null) {
-        DateTime lastUpdate = lastUpdatedTs.toDate();
-        DateTime lastUpdateMidnight = DateTime(
-          lastUpdate.year,
-          lastUpdate.month,
-          lastUpdate.day,
-        );
-        daysPassed = todayMidnight.difference(lastUpdateMidnight).inDays;
-      }
-
-      if (daysPassed > 0) {
-        dailyCorrect = 0;
-        dailyTotal = 0;
-        if (daysPassed >= 7) {
-          weeklyProgress = [0, 0, 0, 0, 0, 0, 0];
-        } else {
-          weeklyProgress.removeRange(0, daysPassed);
-          for (int i = 0; i < daysPassed; i++) {
-            weeklyProgress.add(0);
-          }
-        }
-      }
-
-      dailyCorrect += score;
-      dailyTotal += totalQuestions;
-      double dailyPercent = dailyTotal == 0
-          ? 0
-          : (dailyCorrect / dailyTotal) * 100;
-      weeklyProgress[6] = dailyPercent.round();
-
-      int yesterdayScore = weeklyProgress[5];
-      int todayScore = weeklyProgress[6];
-      int growth = todayScore - yesterdayScore;
-
-      transaction.update(docRef, {
-        'weeklyProgress': weeklyProgress,
-        'weeklyGrowth': growth,
-        'dailyCorrect': dailyCorrect,
-        'dailyTotal': dailyTotal,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
-    });
+    await userRef.set({
+      "weeklyGrowth": growth,
+      "updatedAt": FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 
   Future<void> addQuizRewards({
