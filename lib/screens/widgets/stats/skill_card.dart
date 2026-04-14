@@ -7,6 +7,7 @@ class SkillCard extends StatelessWidget {
   final int percentage;
   final Color accentColor;
   final IconData iconData;
+  final String? customLabel;
 
   const SkillCard({
     super.key,
@@ -14,6 +15,7 @@ class SkillCard extends StatelessWidget {
     required this.percentage,
     required this.accentColor,
     required this.iconData,
+    this.customLabel,
   });
 
   @override
@@ -51,7 +53,7 @@ class SkillCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "$percentage%",
+                      customLabel ?? "$percentage%",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,

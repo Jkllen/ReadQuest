@@ -9,8 +9,8 @@ class BossFightViewModel extends ChangeNotifier {
   final UserService userService;
 
   BossFightViewModel({QuizService? quizService, UserService? userService})
-      : quizService = quizService ?? QuizService(),
-        userService = userService ?? UserService();
+    : quizService = quizService ?? QuizService(),
+      userService = userService ?? UserService();
 
   // --- FUTURE-PROOFING: Remember the current story and difficulty ---
   String currentReadingId = "";
@@ -21,6 +21,7 @@ class BossFightViewModel extends ChangeNotifier {
 
   // Standard Quiz States
   int currentIndex = 0;
+  int rewardXp = 0;
   String? selectedAnswer;
   bool answered = false;
   int score = 0;
@@ -28,10 +29,10 @@ class BossFightViewModel extends ChangeNotifier {
 
   // --- Boss Fight Mechanics ---
   String playerName = 'HERO'; // Default fallback name
-  
+
   int maxPlayerHealth = 3; // Player dies after 3 wrong answers
   int playerHealth = 3;
-  
+
   int maxBossHealth = 2; // Hardcoded to 2 for the victory condition
   int bossHealth = 2;
 
@@ -63,12 +64,12 @@ class BossFightViewModel extends ChangeNotifier {
     // --- FETCH DYNAMIC PLAYER NAME ---
     try {
       // NOTE: Adjust 'getCurrentUserName' to match the exact method in your UserService!
-      final userName = await userService.getUsername(); 
+      final userName = await userService.getUsername();
       if (userName != null && userName.isNotEmpty) {
         playerName = userName;
       }
     } catch (e) {
-      print("Could not fetch user name: $e");
+      debugPrint("Could not fetch user name: $e");
     }
 
     // Reset all states for a fresh fight
@@ -78,7 +79,7 @@ class BossFightViewModel extends ChangeNotifier {
     answered = false;
     score = 0;
     subDifficulty = 'boss'; // Force the state to 'boss'
-    
+
     playerHealth = maxPlayerHealth;
     isGameOver = false;
     isVictory = false;
@@ -93,8 +94,10 @@ class BossFightViewModel extends ChangeNotifier {
         difficulty: difficulty,
       );
 
+      rewardXp = await quizService.getReadingRewardXp(readingId);
+
       questions = result;
-      
+
       // Set the boss health specifically to 2
       maxBossHealth = 2;
       bossHealth = maxBossHealth;
@@ -151,23 +154,31 @@ class BossFightViewModel extends ChangeNotifier {
   }
 
   String get questionText => (currentQuestionData['question'] ?? '').toString();
-  List<String> get options => List<String>.from(currentQuestionData['options'] ?? []);
-  String get correctAnswer => (currentQuestionData['correctAnswer'] ?? '').toString();
-  String get explanation => (currentQuestionData['explanation'] ?? '').toString();
+  List<String> get options =>
+      List<String>.from(currentQuestionData['options'] ?? []);
+  String get correctAnswer =>
+      (currentQuestionData['correctAnswer'] ?? '').toString();
+  String get explanation =>
+      (currentQuestionData['explanation'] ?? '').toString();
   String get skill => (currentQuestionData['skill'] ?? '').toString();
 
   // Health Bar Helpers
-  double get playerHealthFactor => (playerHealth / maxPlayerHealth).clamp(0.0, 1.0);
-  double get bossHealthFactor => maxBossHealth == 0 ? 0.0 : (bossHealth / maxBossHealth).clamp(0.0, 1.0);
+  double get playerHealthFactor =>
+      (playerHealth / maxPlayerHealth).clamp(0.0, 1.0);
+  double get bossHealthFactor =>
+      maxBossHealth == 0 ? 0.0 : (bossHealth / maxBossHealth).clamp(0.0, 1.0);
 
-  bool get isLastQuestion => questions.isNotEmpty && currentIndex == questions.length - 1;
+  bool get isLastQuestion =>
+      questions.isNotEmpty && currentIndex == questions.length - 1;
 
   Future<void> selectAnswer(String option) async {
     // Prevent selection if time is up
-    if (answered || questions.isEmpty || isGameOver || isVictory || isTimeUp) return;
+    if (answered || questions.isEmpty || isGameOver || isVictory || isTimeUp) {
+      return;
+    }
 
     stopTimer(); // Stop the clock when an answer is chosen
-    
+
     selectedAnswer = option;
     answered = true;
 
@@ -176,7 +187,7 @@ class BossFightViewModel extends ChangeNotifier {
       score++;
       bossHealth--;
       await userService.incrementSkillStat(skill: skill);
-      
+
       // If boss hits 0, they win immediately!
       if (bossHealth <= 0) {
         isVictory = true;
@@ -184,7 +195,7 @@ class BossFightViewModel extends ChangeNotifier {
     } else {
       // Incorrect Answer: Player takes damage
       playerHealth--;
-      
+
       // If player hits 0, game over immediately!
       if (playerHealth <= 0) {
         isGameOver = true;
@@ -202,7 +213,6 @@ class BossFightViewModel extends ChangeNotifier {
 
     // Check if the fight is over (Win, Loss, or out of questions)
     if (isGameOver || isVictory || isLastQuestion) {
-      
       // Only award full completion stats and XP if it's a Victory
       if (isVictory) {
         await quizService.saveQuizResult(
@@ -210,17 +220,18 @@ class BossFightViewModel extends ChangeNotifier {
           difficulty: difficulty,
           subDifficulty: subDifficulty,
           score: score,
-          totalQuestions: questions.length, 
+          totalQuestions: questions.length,
         );
 
         await userService.updateWeeklyProgress(
-          score: score, 
-          totalQuestions: questions.length
+          score: score,
+          totalQuestions: questions.length,
         );
 
-        // Bonus multiplier for beating a boss
+        await userService.updateWeeklyGrowth();
+
         await userService.addQuizRewards(
-          xpAmount: (score * 5) + 50, // Added a 50 XP flat boss bonus
+          xpAmount: rewardXp,
           wordsLearnedAmount: 1,
         );
       }
@@ -232,9 +243,9 @@ class BossFightViewModel extends ChangeNotifier {
     currentIndex++;
     selectedAnswer = null;
     answered = false;
-    
+
     startTimer(); // Start the clock for the next question
-    
+
     notifyListeners();
     return false;
   }

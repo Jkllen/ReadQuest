@@ -5,11 +5,9 @@ class ReadingProgressService {
   final FirebaseFirestore firestore;
   final FirebaseAuth auth;
 
-  ReadingProgressService({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  ReadingProgressService({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : firestore = firestore ?? FirebaseFirestore.instance,
+      auth = auth ?? FirebaseAuth.instance;
 
   String? get currentUserId => auth.currentUser?.uid;
 
@@ -86,5 +84,17 @@ class ReadingProgressService {
     }
 
     await progressRef(readingId).set(payload, SetOptions(merge: true));
+  }
+
+  Future<DateTime?> getStartedAt(String readingId) async {
+    final snapshot = await progressRef(readingId).get();
+    final data = snapshot.data();
+
+    final startedAt = data?['startedAt'];
+    if (startedAt is Timestamp) {
+      return startedAt.toDate();
+    }
+
+    return null;
   }
 }

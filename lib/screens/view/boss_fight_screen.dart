@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:read_quest/styles/app_colors.dart';
 import 'package:read_quest/screens/viewmodel/boss_fight_view_model.dart';
+import 'package:read_quest/routes/app_routes.dart';
 
 class BossFightScreen extends StatelessWidget {
   final BossFightViewModel viewModel;
@@ -29,7 +30,10 @@ class BossFightScreen extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.boss.bgStartColor, AppColors.boss.bgEndColor],
+                    colors: [
+                      AppColors.boss.bgStartColor,
+                      AppColors.boss.bgEndColor,
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -37,7 +41,10 @@ class BossFightScreen extends StatelessWidget {
                 child: SafeArea(
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 16.0,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -81,10 +88,14 @@ class BossFightScreen extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColors.boss.cardColor,
-                                    border: Border.all(color: AppColors.boss.cardColor, width: 4),
+                                    border: Border.all(
+                                      color: AppColors.boss.cardColor,
+                                      width: 4,
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppColors.boss.bossMagenta.withValues(alpha: 0.1),
+                                        color: AppColors.boss.bossMagenta
+                                            .withValues(alpha: 0.1),
                                         blurRadius: 40,
                                         spreadRadius: 10,
                                       ),
@@ -94,7 +105,8 @@ class BossFightScreen extends StatelessWidget {
                                     child: Icon(
                                       Icons.visibility_outlined,
                                       size: 80,
-                                      color: AppColors.boss.bossMagenta.withValues(alpha: 0.6),
+                                      color: AppColors.boss.bossMagenta
+                                          .withValues(alpha: 0.6),
                                     ),
                                   ),
                                 ),
@@ -130,13 +142,17 @@ class BossFightScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: AppColors.boss.cardColor,
                               borderRadius: BorderRadius.circular(24),
-                              border: Border.all(color: Colors.white12, width: 1),
+                              border: Border.all(
+                                color: Colors.white12,
+                                width: 1,
+                              ),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
                                       'INCOMING ATTACK!',
@@ -148,12 +164,17 @@ class BossFightScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: const Color(0xFF2A2D3E),
                                         borderRadius: BorderRadius.circular(16),
                                         border: Border.all(
-                                          color: viewModel.remainingTime <= 5 ? Colors.redAccent : Colors.transparent,
+                                          color: viewModel.remainingTime <= 5
+                                              ? Colors.redAccent
+                                              : Colors.transparent,
                                           width: 1,
                                         ),
                                       ),
@@ -161,15 +182,20 @@ class BossFightScreen extends StatelessWidget {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(
-                                            Icons.flash_on, 
-                                            color: viewModel.remainingTime <= 5 ? Colors.redAccent : Colors.amberAccent, 
-                                            size: 16
+                                            Icons.flash_on,
+                                            color: viewModel.remainingTime <= 5
+                                                ? Colors.redAccent
+                                                : Colors.amberAccent,
+                                            size: 16,
                                           ),
                                           const SizedBox(width: 4),
                                           Text(
                                             '${viewModel.remainingTime}s',
                                             style: TextStyle(
-                                              color: viewModel.remainingTime <= 5 ? Colors.redAccent : Colors.amberAccent,
+                                              color:
+                                                  viewModel.remainingTime <= 5
+                                                  ? Colors.redAccent
+                                                  : Colors.amberAccent,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 14,
                                             ),
@@ -181,7 +207,9 @@ class BossFightScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 20),
                                 Text(
-                                  viewModel.questionText.isEmpty ? 'Loading...' : viewModel.questionText,
+                                  viewModel.questionText.isEmpty
+                                      ? 'Loading...'
+                                      : viewModel.questionText,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -193,47 +221,64 @@ class BossFightScreen extends StatelessWidget {
                                 // --- OPTIONS ---
                                 ...viewModel.options.map((option) {
                                   return Padding(
-                                    padding: const EdgeInsets.only(bottom: 12.0),
+                                    padding: const EdgeInsets.only(
+                                      bottom: 12.0,
+                                    ),
                                     child: GestureDetector(
-                                      onTap: () => viewModel.selectAnswer(option),
+                                      onTap: () =>
+                                          viewModel.selectAnswer(option),
                                       child: _buildAnswerOption(option),
                                     ),
                                   );
                                 }),
 
                                 // --- PROGRESSION BUTTON ---
-                                if (viewModel.answered && !viewModel.isTimeUp) ...[
+                                if (viewModel.answered &&
+                                    !viewModel.isTimeUp) ...[
                                   const SizedBox(height: 20),
                                   SizedBox(
                                     width: double.infinity,
                                     height: 56,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: viewModel.isVictory ? Colors.green : AppColors.boss.heroBlue,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                        backgroundColor: viewModel.isVictory
+                                            ? Colors.green
+                                            : AppColors.boss.heroBlue,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                        ),
                                       ),
                                       onPressed: () async {
                                         // --- UPDATED: Using dynamic values ---
                                         final isDone = await viewModel.goNext(
-                                          readingId: viewModel.currentReadingId, 
-                                          difficulty: viewModel.currentDifficulty, 
+                                          readingId: viewModel.currentReadingId,
+                                          difficulty:
+                                              viewModel.currentDifficulty,
                                         );
-                                        
+
                                         if (isDone && context.mounted) {
                                           if (viewModel.isVictory) {
                                             _showVictoryDialog(context);
                                           } else if (viewModel.isGameOver) {
                                             _showDefeatDialog(context);
                                           } else {
-                                            Navigator.pop(context); 
+                                            Navigator.pop(context);
                                           }
                                         }
                                       },
                                       child: Text(
-                                        viewModel.isVictory 
-                                            ? 'CLAIM VICTORY' 
-                                            : (viewModel.isGameOver ? 'CONTINUE' : 'NEXT STRIKE'),
-                                        style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                        viewModel.isVictory
+                                            ? 'CLAIM VICTORY'
+                                            : (viewModel.isGameOver
+                                                  ? 'CONTINUE'
+                                                  : 'NEXT STRIKE'),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -259,7 +304,10 @@ class BossFightScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.boss.cardColor,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.redAccent.withValues(alpha: 0.5), width: 2),
+                        border: Border.all(
+                          color: Colors.redAccent.withValues(alpha: 0.5),
+                          width: 2,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.redAccent.withValues(alpha: 0.2),
@@ -271,17 +319,30 @@ class BossFightScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.timer_off, color: Colors.redAccent, size: 64),
+                          const Icon(
+                            Icons.timer_off,
+                            color: Colors.redAccent,
+                            size: 64,
+                          ),
                           const SizedBox(height: 16),
                           const Text(
                             "TIME'S UP!",
-                            style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                            ),
                           ),
                           const SizedBox(height: 12),
                           const Text(
                             "You hesitated, and the Shadow Lexicon struck first.",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.5),
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                              height: 1.5,
+                            ),
                           ),
                           const SizedBox(height: 32),
                           SizedBox(
@@ -290,12 +351,21 @@ class BossFightScreen extends StatelessWidget {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.redAccent,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
                               onPressed: () {
-                                viewModel.retryQuestion(); 
+                                viewModel.retryQuestion();
                               },
-                              child: const Text("TRY AGAIN", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                              child: const Text(
+                                "TRY AGAIN",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -313,7 +383,7 @@ class BossFightScreen extends StatelessWidget {
   Widget _buildAnswerOption(String text) {
     final bool isSelected = viewModel.selectedAnswer == text;
     final bool isCorrect = text == viewModel.correctAnswer;
-    
+
     Color backgroundColor = AppColors.boss.cardColor.withValues(alpha: 0.5);
     Color borderColor = Colors.white10;
 
@@ -337,11 +407,18 @@ class BossFightScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: borderColor, width: isSelected || (viewModel.answered && isCorrect) ? 2 : 1),
+        border: Border.all(
+          color: borderColor,
+          width: isSelected || (viewModel.answered && isCorrect) ? 2 : 1,
+        ),
       ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -355,7 +432,9 @@ class BossFightScreen extends StatelessWidget {
   }) {
     return Expanded(
       child: Column(
-        crossAxisAlignment: isLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+        crossAxisAlignment: isLeft
+            ? CrossAxisAlignment.start
+            : CrossAxisAlignment.end,
         children: [
           Row(
             children: [
@@ -369,11 +448,16 @@ class BossFightScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: FractionallySizedBox(
-                    alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
+                    alignment: isLeft
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
                     widthFactor: progress.clamp(0.0, 1.0),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-                      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                     ),
                   ),
                 ),
@@ -383,7 +467,14 @@ class BossFightScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 10)),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 10,
+            ),
+          ),
         ],
       ),
     );
@@ -392,7 +483,10 @@ class BossFightScreen extends StatelessWidget {
   Widget _buildIconContainer(IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.2), shape: BoxShape.circle),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.2),
+        shape: BoxShape.circle,
+      ),
       child: Icon(icon, size: 16, color: color),
     );
   }
@@ -406,13 +500,15 @@ class BossFightScreen extends StatelessWidget {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: AppColors.boss.bgStartColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: const Text(
             'VICTORY!',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white, 
-              fontSize: 32, 
+              color: Colors.white,
+              fontSize: 32,
               fontWeight: FontWeight.bold,
               letterSpacing: 2.0,
             ),
@@ -427,14 +523,18 @@ class BossFightScreen extends StatelessWidget {
               const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.stars_rounded, color: Colors.amber, size: 48),
-                  SizedBox(width: 12),
+                children: [
+                  const Icon(
+                    Icons.stars_rounded,
+                    color: Colors.amber,
+                    size: 48,
+                  ),
+                  const SizedBox(width: 12),
                   Text(
-                    '+ 65 EXP',
-                    style: TextStyle(
-                      color: Colors.amber, 
-                      fontSize: 36, 
+                    '+ ${viewModel.rewardXp} EXP',
+                    style: const TextStyle(
+                      color: Colors.amber,
+                      fontSize: 36,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -448,16 +548,27 @@ class BossFightScreen extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.boss.heroBlue,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 16,
+                ),
               ),
               onPressed: () {
-                Navigator.of(dialogContext).pop(); 
-                Navigator.of(context).pop(); 
+                Navigator.of(dialogContext).pop();
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
               },
               child: const Text(
-                'CLAIM REWARD', 
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)
+                'CLAIM REWARD',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -473,13 +584,15 @@ class BossFightScreen extends StatelessWidget {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: AppColors.boss.bgStartColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Text(
             'DEFEAT',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColors.boss.bossMagenta, 
-              fontSize: 32, 
+              color: AppColors.boss.bossMagenta,
+              fontSize: 32,
               fontWeight: FontWeight.bold,
               letterSpacing: 2.0,
             ),
@@ -497,31 +610,37 @@ class BossFightScreen extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.boss.bossMagenta,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   onPressed: () {
                     Navigator.of(dialogContext).pop();
                     // --- UPDATED: Using dynamic values ---
                     viewModel.loadBossFight(
-                      readingId: viewModel.currentReadingId, 
+                      readingId: viewModel.currentReadingId,
                       difficulty: viewModel.currentDifficulty,
                     );
                   },
                   child: const Text(
-                    'TRY AGAIN', 
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)
+                    'TRY AGAIN',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(dialogContext).pop(); 
-                    Navigator.of(context).pop(); 
+                    Navigator.of(dialogContext).pop();
+                    Navigator.of(context).pop();
                   },
                   child: const Text(
-                    'Retreat to Menu', 
-                    style: TextStyle(color: Colors.white54, fontSize: 14)
+                    'Retreat to Menu',
+                    style: TextStyle(color: Colors.white54, fontSize: 14),
                   ),
                 ),
               ],

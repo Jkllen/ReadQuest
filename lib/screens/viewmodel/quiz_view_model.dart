@@ -124,6 +124,7 @@ class QuizViewModel extends ChangeNotifier {
         xpAmount: score * 5,
         wordsLearnedAmount: 1,
       );
+      await userService.updateWeeklyGrowth();
 
       return true;
     }
