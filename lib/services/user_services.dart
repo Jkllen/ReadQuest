@@ -42,20 +42,17 @@ class UserService {
       "vocabulary": 0,
       "readingSpeed": 0,
       "weeklyGrowth": 0,
-      "weeklyProgress": [0, 0, 0, 0, 0, 0],
+      "weeklyProgress": [0, 0, 0, 0, 0, 0, 0],
 
       "updatedAt": FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
   }
 
   Future<void> updateUser(String uid, Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).set(
-      {
-        ...data,
-        "updatedAt": FieldValue.serverTimestamp(),
-      },
-      SetOptions(merge: true),
-    );
+    await _db.collection('users').doc(uid).set({
+      ...data,
+      "updatedAt": FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 
   Future<void> incrementSkillStat({
@@ -73,9 +70,7 @@ class UserService {
     }, SetOptions(merge: true));
   }
 
-  Future<void> updateReadingSpeed({
-    required int readingSpeed,
-  }) async {
+  Future<void> updateReadingSpeed({required int readingSpeed}) async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
 
@@ -92,61 +87,82 @@ class UserService {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
 
-    final userRef = _db.collection('users').doc(uid);
-    final snapshot = await userRef.get();
-    final data = snapshot.data() ?? {};
+    final double percent = totalQuestions == 0
+        ? 0
+        : (score / totalQuestions) * 100;
+    final int progressToAdd = percent.round();
 
-    final List<dynamic> oldProgress =
-        (data['weeklyProgress'] as List<dynamic>?) ?? [0, 0, 0, 0, 0, 0];
+    final docRef = _db.collection('users').doc(uid);
 
-    final double percent =
-        totalQuestions == 0 ? 0 : (score / totalQuestions) * 100;
+    await _db.runTransaction((transaction) async {
+      final snapshot = await transaction.get(docRef);
+      if (!snapshot.exists) return;
 
-    final List<dynamic> updatedProgress = List<dynamic>.from(oldProgress);
+      final data = snapshot.data()!;
 
-    if (updatedProgress.length < 6) {
-      while (updatedProgress.length < 6) {
-        updatedProgress.add(0);
+      List<dynamic> rawProgress =
+          data['weeklyProgress'] ?? [0, 0, 0, 0, 0, 0, 0];
+      List<int> weeklyProgress = rawProgress
+          .map((e) => (e as num).toInt())
+          .toList();
+
+      while (weeklyProgress.length < 7) {
+        weeklyProgress.insert(0, 0);
       }
-    }
+      if (weeklyProgress.length > 7) {
+        weeklyProgress = weeklyProgress.sublist(weeklyProgress.length - 7);
+      }
 
-    updatedProgress.removeAt(0);
-    updatedProgress.add(percent.round());
+      int dailyCorrect = (data['dailyCorrect'] ?? 0).toInt();
+      int dailyTotal = (data['dailyTotal'] ?? 0).toInt();
 
-    await userRef.set({
-      "weeklyProgress": updatedProgress,
-      "updatedAt": FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-  }
+      Timestamp? lastUpdatedTs = data['updatedAt'] as Timestamp?;
+      DateTime now = DateTime.now();
+      DateTime todayMidnight = DateTime(now.year, now.month, now.day);
 
-  Future<void> updateWeeklyGrowth() async {
-    final uid = _auth.currentUser?.uid;
-    if (uid == null) return;
+      int daysPassed = 0;
+      if (lastUpdatedTs != null) {
+        DateTime lastUpdate = lastUpdatedTs.toDate();
+        DateTime lastUpdateMidnight = DateTime(
+          lastUpdate.year,
+          lastUpdate.month,
+          lastUpdate.day,
+        );
+        daysPassed = todayMidnight.difference(lastUpdateMidnight).inDays;
+      }
 
-    final userRef = _db.collection('users').doc(uid);
-    final snapshot = await userRef.get();
-    final data = snapshot.data() ?? {};
+      if (daysPassed > 0) {
+        dailyCorrect = 0;
+        dailyTotal = 0;
+        if (daysPassed >= 7) {
+          weeklyProgress = [0, 0, 0, 0, 0, 0, 0];
+        } else {
+          weeklyProgress.removeRange(0, daysPassed);
+          for (int i = 0; i < daysPassed; i++) {
+            weeklyProgress.add(0);
+          }
+        }
+      }
 
-    final List<dynamic> weeklyProgress =
-        (data['weeklyProgress'] as List<dynamic>?) ?? [0, 0, 0, 0, 0, 0];
+      dailyCorrect += score;
+      dailyTotal += totalQuestions;
+      double dailyPercent = dailyTotal == 0
+          ? 0
+          : (dailyCorrect / dailyTotal) * 100;
+      weeklyProgress[6] = dailyPercent.round();
 
-    if (weeklyProgress.length < 2) {
-      await userRef.set({
-        "weeklyGrowth": 0,
-        "updatedAt": FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-      return;
-    }
+      int yesterdayScore = weeklyProgress[5];
+      int todayScore = weeklyProgress[6];
+      int growth = todayScore - yesterdayScore;
 
-    final num previous = weeklyProgress[weeklyProgress.length - 2] ?? 0;
-    final num latest = weeklyProgress[weeklyProgress.length - 1] ?? 0;
-
-    final int growth = (latest - previous).round();
-
-    await userRef.set({
-      "weeklyGrowth": growth,
-      "updatedAt": FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+      transaction.update(docRef, {
+        'weeklyProgress': weeklyProgress,
+        'weeklyGrowth': growth,
+        'dailyCorrect': dailyCorrect,
+        'dailyTotal': dailyTotal,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    });
   }
 
   Future<void> addQuizRewards({

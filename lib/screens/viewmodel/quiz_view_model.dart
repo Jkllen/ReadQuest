@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:read_quest/services/quiz_service.dart';
 import 'package:read_quest/services/user_services.dart';
 
-
 class QuizViewModel extends ChangeNotifier {
   final QuizService quizService;
   final UserService userService;
 
   QuizViewModel({QuizService? quizService, UserService? userService})
-      : quizService = quizService ?? QuizService(),
-        userService = userService ?? UserService();
+    : quizService = quizService ?? QuizService(),
+      userService = userService ?? UserService();
 
   bool isLoading = true;
   List<QueryDocumentSnapshot<Map<String, dynamic>>> questions = [];
@@ -65,8 +64,7 @@ class QuizViewModel extends ChangeNotifier {
     return questions[currentIndex].data();
   }
 
-  String get questionText =>
-      (currentQuestionData['question'] ?? '').toString();
+  String get questionText => (currentQuestionData['question'] ?? '').toString();
 
   List<String> get options =>
       List<String>.from(currentQuestionData['options'] ?? []);
@@ -77,8 +75,7 @@ class QuizViewModel extends ChangeNotifier {
   String get explanation =>
       (currentQuestionData['explanation'] ?? '').toString();
 
-  String get skill =>
-      (currentQuestionData['skill'] ?? '').toString();
+  String get skill => (currentQuestionData['skill'] ?? '').toString();
 
   String get progressText =>
       questions.isEmpty ? '0/0' : '${currentIndex + 1}/${questions.length}';
@@ -89,7 +86,7 @@ class QuizViewModel extends ChangeNotifier {
   bool get isLastQuestion =>
       questions.isNotEmpty && currentIndex == questions.length - 1;
 
-  Future<void> selectAnswer(String option) async{
+  Future<void> selectAnswer(String option) async {
     if (answered || questions.isEmpty) return;
 
     selectedAnswer = option;
@@ -119,11 +116,9 @@ class QuizViewModel extends ChangeNotifier {
       );
 
       await userService.updateWeeklyProgress(
-        score: score, 
-        totalQuestions: questions.length
+        score: score,
+        totalQuestions: questions.length,
       );
-
-      await userService.updateWeeklyGrowth();
 
       await userService.addQuizRewards(
         xpAmount: score * 5,
