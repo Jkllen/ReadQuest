@@ -5,11 +5,9 @@ class QuizService {
   final FirebaseFirestore firestore;
   final FirebaseAuth auth;
 
-  QuizService({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  QuizService({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : firestore = firestore ?? FirebaseFirestore.instance,
+      auth = auth ?? FirebaseAuth.instance;
 
   Future<String> determineSubDifficulty({
     required String readingId,
@@ -123,11 +121,23 @@ class QuizService {
         .collection('quizzes')
         .doc(difficulty)
         .collection('questions')
-        .where('subDifficulty', isEqualTo: 'boss') // Filters only for boss questions
+        .where(
+          'subDifficulty',
+          isEqualTo: 'boss',
+        ) // Filters only for boss questions
         .orderBy('order')
         .get();
 
     return snapshot.docs;
+  }
+
+  Future<int> getReadingRewardXp(String readingId) async {
+    final snapshot = await firestore
+        .collection('readings')
+        .doc(readingId)
+        .get();
+    final data = snapshot.data() ?? {};
+    return (data['rewardXp'] as num?)?.toInt() ?? 0;
   }
 
   Future<void> saveQuizResult({
@@ -148,13 +158,13 @@ class QuizService {
         .collection('quiz_results')
         .doc('${readingId}_$difficulty')
         .set({
-      'readingId': readingId,
-      'difficulty': difficulty,
-      'subDifficulty': subDifficulty,
-      'score': score,
-      'totalQuestions': totalQuestions,
-      'accuracy': accuracy,
-      'completedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+          'readingId': readingId,
+          'difficulty': difficulty,
+          'subDifficulty': subDifficulty,
+          'score': score,
+          'totalQuestions': totalQuestions,
+          'accuracy': accuracy,
+          'completedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
   }
 }
