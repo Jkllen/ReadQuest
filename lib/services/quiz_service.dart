@@ -112,6 +112,24 @@ class QuizService {
     return snapshot.docs;
   }
 
+  // --- NEW: Dedicated Boss Fight Fetcher ---
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getBossQuestions({
+    required String readingId,
+    required String difficulty,
+  }) async {
+    final snapshot = await firestore
+        .collection('readings')
+        .doc(readingId)
+        .collection('quizzes')
+        .doc(difficulty)
+        .collection('questions')
+        .where('subDifficulty', isEqualTo: 'boss') // Filters only for boss questions
+        .orderBy('order')
+        .get();
+
+    return snapshot.docs;
+  }
+
   Future<void> saveQuizResult({
     required String readingId,
     required String difficulty,

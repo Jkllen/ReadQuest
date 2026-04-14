@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:read_quest/screens/view/boss_fight_screen.dart';
 import 'package:read_quest/screens/viewmodel/quiz_view_model.dart';
+// --> I added this import so it knows what BossFightViewModel is! 
+// Adjust the path if you saved it in a slightly different folder.
+import 'package:read_quest/screens/viewmodel/boss_fight_view_model.dart'; 
 import 'package:read_quest/styles/app_colors.dart';
 
 class QuizScreen extends StatelessWidget {
@@ -231,7 +234,13 @@ class QuizScreenBody extends StatelessWidget {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => const BossFightScreen(),
+                                      // --> FIXED: Passing the ViewModel and removed 'const'
+                                      builder: (_) => BossFightScreen(
+                                        viewModel: BossFightViewModel()..loadBossFight(
+                                          readingId: readingId,
+                                          difficulty: difficulty,
+                                        ),
+                                      ),
                                     ),
                                   );
                                 }

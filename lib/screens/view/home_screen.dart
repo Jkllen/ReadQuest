@@ -5,7 +5,6 @@ import 'package:read_quest/screens/view/home_tabs/dashboard_tab.dart';
 import 'package:read_quest/screens/view/home_tabs/stats_tab.dart';
 import 'package:read_quest/screens/widgets/home/app_nav_destination.dart';
 import 'package:read_quest/styles/app_colors.dart';
-import 'package:animate_gradient/animate_gradient.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
