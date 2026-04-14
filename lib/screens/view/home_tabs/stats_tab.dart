@@ -11,6 +11,21 @@ import 'package:read_quest/styles/card_styles.dart';
 class StatsTab extends StatelessWidget {
   const StatsTab({super.key});
 
+  // Helper method to format DateTime to "YYYY-MM-DD"
+  String _formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+
+  double getWeeklyTotal(Map<String, dynamic> dailyStats, DateTime startOfWeek) {
+    double total = 0.0;
+    for (int i = 0; i < 7; i++) {
+      DateTime day = startOfWeek.add(Duration(days: i));
+      String dateKey = _formatDate(day);
+      total += (dailyStats[dateKey] ?? 0.0).toDouble();
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -42,46 +57,51 @@ class StatsTab extends StatelessWidget {
         // --- DYNAMIC DATA EXTRACTION ---
 
         // 1. Skill Mastery
-        final int comprehension = (data['comprehension'] ?? 0).toInt();
         final int vocabulary = (data['vocabulary'] ?? 0).toInt();
+
+        // Defaulting these to 0 since they aren't in this specific DB snapshot
+        final int comprehension = (data['comprehension'] ?? 0).toInt();
         final int readingSpeed = (data['readingSpeed'] ?? 0).toInt();
 
-        // 2. Weekly Growth Percentage
+        // --- 2. WEEKLY GROWTH ---
+        // Reading the static value directly from your Firestore document
         final int weeklyGrowth = (data['weeklyGrowth'] ?? 0).toInt();
+
         final bool isPositiveGrowth = weeklyGrowth >= 0;
         final String growthText = isPositiveGrowth
-            ? "+$weeklyGrowth% from last week"
-            : "$weeklyGrowth% from last week";
+            ? "+$weeklyGrowth% from yesterday"
+            : "$weeklyGrowth% from yesterday";
+
         final Color growthColor = isPositiveGrowth
             ? AppColors.stats.positiveGrowth
             : AppColors.stats.negativeGrowth;
+
         final IconData growthIcon = isPositiveGrowth
             ? Icons.trending_up
             : Icons.trending_down;
 
-        // 3. Weekly Progress Chart Data
+        // --- 3. WEEKLY PROGRESS CHART DATA ---
+        // Changed to 'weeklyProgress' to match your database field!
         final List<dynamic> rawWeeklyData =
-            data['weeklyProgress'] ?? [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+            data['weeklyProgress'] ?? [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
         List<FlSpot> chartSpots = [];
-        double maxY = 5.0;
+        double maxY = 5.0; // Base max Y
 
         for (int i = 0; i < rawWeeklyData.length; i++) {
           final double val = (rawWeeklyData[i] is num)
               ? (rawWeeklyData[i] as num).toDouble()
               : 0.0;
 
-          if (val > maxY) {
-            maxY = val + 1.0;
-          }
+          // Dynamically adjust the chart's height based on your data (e.g., if you have 100)
+          if (val > maxY) maxY = val + 10.0;
 
           chartSpots.add(FlSpot(i.toDouble(), val));
         }
-        // Fallback to a flat line if data is missing or empty
-        if (chartSpots.isEmpty) {
-          chartSpots = List.generate(6, (index) => FlSpot(index.toDouble(), 0));
-        }
 
+        if (chartSpots.isEmpty) {
+          chartSpots = List.generate(7, (index) => FlSpot(index.toDouble(), 0));
+        }
         return Scaffold(
           backgroundColor: AppColors.homeBackground,
           body: SafeArea(
@@ -119,7 +139,7 @@ class StatsTab extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  "WEEKLY GROWTH",
+                                  "Daily Progression",
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
@@ -155,7 +175,11 @@ class StatsTab extends StatelessWidget {
                                     reservedSize: 22,
                                     interval: 1,
                                     getTitlesWidget: (value, meta) {
-                                      const days = [
+                                      // 1. Generate the last 7 days dynamically
+                                      DateTime now = DateTime.now();
+                                      List<String> dynamicDays = [];
+                                      const weekDays = [
+                                        'Mon',
                                         'Tue',
                                         'Wed',
                                         'Thu',
@@ -163,24 +187,34 @@ class StatsTab extends StatelessWidget {
                                         'Sat',
                                         'Sun',
                                       ];
+                                      for (int i = 0; i < 7; i++) {
+                                        DateTime historicalDay = now.subtract(
+                                          Duration(days: 6 - i),
+                                        );
+
+                                        dynamicDays.add(
+                                          weekDays[historicalDay.weekday - 1],
+                                        );
+                                      }
 
                                       if (value.toInt() >= 0 &&
-                                          value.toInt() < days.length) {
+                                          value.toInt() < dynamicDays.length) {
                                         return Padding(
                                           padding: const EdgeInsets.only(
                                             top: 8.0,
                                           ),
                                           child: Text(
-                                            days[value.toInt()],
+                                            // If today is index 6, you might want to label it 'Today' instead of the day name!
+                                            // value.toInt() == 6 ? 'Today' : dynamicDays[value.toInt()],
+                                            dynamicDays[value.toInt()],
                                             style: TextStyle(
-                                              color: Colors.grey.shade500,
+                                              color: Colors.black87,
                                               fontSize: 11,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                         );
                                       }
-
                                       return const Text('');
                                     },
                                   ),
@@ -256,7 +290,6 @@ class StatsTab extends StatelessWidget {
                     iconData: Icons.wifi_tethering_rounded,
                     customLabel: "$readingSpeed WPM",
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),

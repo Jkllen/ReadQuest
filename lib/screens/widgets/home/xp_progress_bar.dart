@@ -37,7 +37,7 @@ class XpProgressBar extends StatelessWidget {
             const Text(
               'XP Progress',
               style: TextStyle(
-                color: Color(0xFF8B8B8B),
+                color: Colors.black,
                 fontSize: 14,
                 fontFamily: 'Maname',
                 fontWeight: FontWeight.w400,
@@ -47,7 +47,7 @@ class XpProgressBar extends StatelessWidget {
             Text(
               '${formatNumber(currentXp)}/${formatNumber(targetXp)} XP',
               style: const TextStyle(
-                color: Color(0xFF8B8B8B),
+                color: Colors.black,
                 fontSize: 14,
                 fontFamily: 'Maname',
                 fontWeight: FontWeight.w400,
