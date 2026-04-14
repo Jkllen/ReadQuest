@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:read_quest/services/reading_progress_service.dart';
+import 'package:read_quest/services/user_services.dart';
 
 class ReadingContentViewModel {
   final ReadingProgressService readingProgressService;
+  final UserService userService;
 
   double lastSavedProgress = 0.0;
   bool isSavingProgress = false;
   bool hasInitializedProgress = false;
   bool hasCompleted = false;
 
-  ReadingContentViewModel({ReadingProgressService? readingProgressService})
-    : readingProgressService =
-          readingProgressService ?? ReadingProgressService();
+  ReadingContentViewModel({
+    ReadingProgressService? readingProgressService,
+    UserService? userService,
+  }) : readingProgressService =
+           readingProgressService ?? ReadingProgressService(),
+       userService = userService ?? UserService();
 
   Future<void> initializeProgress({
     required String readingId,
@@ -111,12 +116,24 @@ class ReadingContentViewModel {
     isSavingProgress = true;
 
     try {
+      final startedAt =
+          await readingProgressService.getStartedAt(readingId) ??
+          DateTime.now();
+
+      final completedAt = DateTime.now();
+
       await readingProgressService.saveProgress(
         readingId: readingId,
         title: title,
         progress: 1.0,
         isCompleted: true,
         rewardXp: rewardXp,
+      );
+
+      await userService.updateReadingStatsOnCompletion(
+        readingId: readingId,
+        startedAt: startedAt,
+        completedAt: completedAt,
       );
 
       lastSavedProgress = 1.0;
