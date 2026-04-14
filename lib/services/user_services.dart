@@ -30,7 +30,7 @@ class UserService {
       "level": 0,
       "streak": 0,
       "currentXp": 0,
-      "targetXp": 2000,
+      "targetXp": 100,
       "totalXpEarned": 0,
       "badgesWon": 0,
       "streakDays": 0,
@@ -41,6 +41,8 @@ class UserService {
       "comprehension": 0,
       "vocabulary": 0,
       "readingSpeed": 0,
+      "readingSessions": 0,
+      "readingSpeedTotal": 0,
       "weeklyGrowth": 0,
       "weeklyProgress": [0, 0, 0, 0, 0, 0],
 
@@ -68,6 +70,8 @@ class UserService {
       skill: FieldValue.increment(amount),
       "updatedAt": FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
+
+    await refreshBadgesWon();
   }
 
   Future<void> updateReadingSpeed({required int readingSpeed}) async {
@@ -78,6 +82,8 @@ class UserService {
       "readingSpeed": readingSpeed,
       "updatedAt": FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
+
+    await refreshBadgesWon();
   }
 
   Future<void> updateWeeklyProgress({
@@ -141,6 +147,39 @@ class UserService {
     }, SetOptions(merge: true));
   }
 
+  Future<int> getCompletedReadingsCount() async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return 0;
+
+    final snapshot = await _db
+        .collection('users')
+        .doc(uid)
+        .collection('progress')
+        .where('isCompleted', isEqualTo: true)
+        .get();
+
+    return snapshot.docs.length;
+  }
+
+  Future<void> refreshBadgesWon() async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
+
+    final doc = await _db.collection('users').doc(uid).get();
+    final data = doc.data() ?? {};
+
+    final completedReadings = await getCompletedReadingsCount();
+
+    await updateBadgesWon(
+      comprehension: (data['comprehension'] as num?)?.toInt() ?? 0,
+      vocabulary: (data['vocabulary'] as num?)?.toInt() ?? 0,
+      readingSpeed: (data['readingSpeed'] as num?)?.toInt() ?? 0,
+      streakDays: (data['streakDays'] as num?)?.toInt() ?? 0,
+      completedReadings: completedReadings,
+      totalXpEarned: (data['totalXpEarned'] as num?)?.toInt() ?? 0,
+    );
+  }
+
   Future<void> updateWeeklyGrowth() async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
@@ -178,36 +217,87 @@ class UserService {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
 
-    await _db.collection('users').doc(uid).set({
-      "currentXp": FieldValue.increment(xpAmount),
-      "totalXpEarned": FieldValue.increment(xpAmount),
+    final userRef = _db.collection('users').doc(uid);
+    final snapshot = await userRef.get();
+    final data = snapshot.data() ?? {};
+
+    final int oldTotalXp = (data['totalXpEarned'] as num?)?.toInt() ?? 0;
+    final int newTotalXp = oldTotalXp + xpAmount;
+
+    final levelData = _calculateLevelData(newTotalXp);
+
+    await userRef.set({
+      "level": levelData.level,
+      "currentXp": levelData.currentXp,
+      "targetXp": levelData.targetXp,
+      "totalXpEarned": newTotalXp,
       "wordsLearned": FieldValue.increment(wordsLearnedAmount),
       "updatedAt": FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
+    await refreshBadgesWon();
+  }
+
+  _LevelData _calculateLevelData(int totalXp) {
+    int level = 0;
+    int xpRemaining = totalXp;
+    int targetXp = _xpNeededForLevel(level);
+
+    while (xpRemaining >= targetXp) {
+      xpRemaining -= targetXp;
+      level++;
+      targetXp = _xpNeededForLevel(level);
+    }
+
+    return _LevelData(level: level, currentXp: xpRemaining, targetXp: targetXp);
+  }
+
+  int _xpNeededForLevel(int level) {
+    return (level + 1) * 100;
   }
 
   Future<void> updateReadingStatsOnCompletion({
     required String readingId,
+    required String content,
     required DateTime startedAt,
     required DateTime completedAt,
-    int minimumMinutes = 1,
   }) async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
 
     final userRef = _db.collection('users').doc(uid);
+    final snapshot = await userRef.get();
+    final data = snapshot.data() ?? {};
 
-    final durationMinutes = completedAt.difference(startedAt).inMinutes;
-    final safeMinutes = durationMinutes < minimumMinutes
-        ? minimumMinutes
-        : durationMinutes;
+    final durationMinutes = completedAt.difference(startedAt).inSeconds / 60;
+
+    final safeMinutes = durationMinutes <= 0 ? 1 : durationMinutes;
+
+    final wordCount = content
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .length;
+
+    final int sessionWpm = (wordCount / safeMinutes).round();
+
+    final int oldReadingSessions =
+        (data['readingSessions'] as num?)?.toInt() ?? 0;
+    final int oldReadingSpeedTotal =
+        (data['readingSpeedTotal'] as num?)?.toInt() ?? 0;
+
+    final int newReadingSessions = oldReadingSessions + 1;
+    final int newReadingSpeedTotal = oldReadingSpeedTotal + sessionWpm;
+    final int averageWpm = (newReadingSpeedTotal / newReadingSessions).round();
 
     await userRef.set({
-      "readingSpeed": FieldValue.increment(safeMinutes),
+      "readingSpeed": averageWpm,
+      "readingSessions": newReadingSessions,
+      "readingSpeedTotal": newReadingSpeedTotal,
       "updatedAt": FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
 
     await _updateDailyStreak(completedAt: completedAt);
+    await refreshBadgesWon();
   }
 
   Future<void> _updateDailyStreak({required DateTime completedAt}) async {
@@ -265,4 +355,16 @@ class UserService {
       "updatedAt": FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
   }
+}
+
+class _LevelData {
+  final int level;
+  final int currentXp;
+  final int targetXp;
+
+  _LevelData({
+    required this.level,
+    required this.currentXp,
+    required this.targetXp,
+  });
 }

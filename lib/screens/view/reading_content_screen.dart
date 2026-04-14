@@ -100,6 +100,7 @@ class ReadingContentScreenState extends State<ReadingContentScreen> {
     viewModel.onScrollProgressChanged(
       readingId: widget.readingId,
       title: widget.title,
+      content: widget.content,
       rewardXp: widget.rewardXp,
       currentProgress: currentProgress,
     );
@@ -109,6 +110,7 @@ class ReadingContentScreenState extends State<ReadingContentScreen> {
     await viewModel.completeReading(
       readingId: widget.readingId,
       title: widget.title,
+      content: widget.content,
       rewardXp: widget.rewardXp,
     );
 

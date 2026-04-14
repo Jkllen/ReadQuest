@@ -55,6 +55,7 @@ class ReadingContentViewModel {
   Future<void> onScrollProgressChanged({
     required String readingId,
     required String title,
+    required String content,
     required int rewardXp,
     required double currentProgress,
   }) async {
@@ -73,6 +74,7 @@ class ReadingContentViewModel {
       await completeReading(
         readingId: readingId,
         title: title,
+        content: content,
         rewardXp: rewardXp,
       );
       return;
@@ -107,6 +109,7 @@ class ReadingContentViewModel {
   Future<void> completeReading({
     required String readingId,
     required String title,
+    required String content,
     required int rewardXp,
   }) async {
     if (readingProgressService.currentUserId == null) return;
@@ -132,6 +135,7 @@ class ReadingContentViewModel {
 
       await userService.updateReadingStatsOnCompletion(
         readingId: readingId,
+        content: content,
         startedAt: startedAt,
         completedAt: completedAt,
       );

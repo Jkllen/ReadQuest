@@ -251,9 +251,10 @@ class StatsTab extends StatelessWidget {
                   const SizedBox(height: 14),
                   SkillCard(
                     title: "Reading Speed",
-                    percentage: readingSpeed,
+                    percentage: readingSpeed.clamp(0,100),
                     accentColor: AppColors.stats.speedCard,
                     iconData: Icons.wifi_tethering_rounded,
+                    customLabel: "$readingSpeed WPM",
                   ),
                   const SizedBox(height: 20),
                 ],
